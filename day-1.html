@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050508" />
+  <meta name="description" content="A little secret for Nida — from Kabir." />
+  <meta property="og:title" content="Nida ❤️ — A Little Secret" />
+  <meta property="og:description" content="Nida... I have a little secret." />
+  <title>Day 1 — A Little Secret | Nida ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bg-layer bg-gradient vignette" aria-hidden="true"></div>
+
+  <main class="page section">
+    <div class="container envelope-scene">
+      <span class="chapter-tag">Chapter One</span>
+      <h1 class="page-title" id="day1-open" style="opacity:0">Nida... I have a little secret.</h1>
+      <p class="page-subtitle" id="day1-sub" style="opacity:0">Your birthday is coming.</p>
+
+      <div class="mail-stage">
+        <div
+          class="envelope"
+          id="envelope"
+          role="button"
+          tabindex="0"
+          aria-label="Open the envelope"
+          aria-expanded="false"
+        >
+          <div class="envelope__back" aria-hidden="true"></div>
+          <div class="envelope__letter" id="envelope-letter">
+            Advance Happy Birthday, Nida ❤️
+          </div>
+          <div class="envelope__pocket" aria-hidden="true"></div>
+          <div class="envelope__flap" id="envelope-flap" aria-hidden="true"></div>
+          <div class="envelope__seal" aria-hidden="true">♥</div>
+        </div>
+      </div>
+      <p class="hint-tap" id="envelope-hint">Tap the envelope</p>
+
+      <div class="letter-reveal" id="message-reveal" hidden>
+        <p>Before your birthday arrives,<br />I wanted to remind you of something...</p>
+        <p>You are one of the most beautiful parts of my life.</p>
+        <p>And honestly? I've been counting the days.</p>
+        <p>I'm so excited for your birthday, Nida —<br />more than I can put into one message.</p>
+        <p>This week isn't just a countdown to a date...</p>
+        <p>It's a countdown to celebrating <em>you</em>.</p>
+        <p>I can't wait to see you smile that day.</p>
+        <p class="closing-note" style="opacity:1;margin-top:1.5rem">Until next time ❤️<br /><span style="font-size:0.9em;color:var(--text-muted)">— Kabir</span></p>
+      </div>
+    </div>
+  </main>
+
+  <button class="music-btn" type="button" aria-label="Toggle music">
+    <span class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+    <span class="music-label">♫ Play our song</span>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const { bootCommon, $, $$, prefersReducedMotion } = window.birthdayUtils;
+      bootCommon({ count: 50, hearts: true });
+
+      const open = $("#day1-open");
+      const sub = $("#day1-sub");
+      const envelope = $("#envelope");
+      const flap = $("#envelope-flap");
+      const letter = $("#envelope-letter");
+      const seal = envelope.querySelector(".envelope__seal");
+      const hint = $("#envelope-hint");
+      const reveal = $("#message-reveal");
+      const stage = envelope.closest(".mail-stage");
+      let opened = false;
+
+      // Letter starts tucked in the pocket
+      if (window.gsap) {
+        gsap.set(letter, { xPercent: -50, y: 36, scale: 0.94, opacity: 0 });
+        gsap.set(flap, { rotateX: 0, transformOrigin: "top center" });
+      }
+
+      if (window.gsap && !prefersReducedMotion()) {
+        gsap.to(open, { opacity: 1, duration: 1.2, delay: 0.3 });
+        gsap.to(sub, { opacity: 1, duration: 1, delay: 1.1 });
+        gsap.from(stage, { opacity: 0, y: 36, duration: 1, delay: 1.55, ease: "power2.out" });
+      } else {
+        open.style.opacity = "1";
+        sub.style.opacity = "1";
+      }
+
+      function openEnvelope() {
+        if (opened) return;
+        opened = true;
+        envelope.setAttribute("aria-expanded", "true");
+        envelope.classList.add("is-open");
+        hint.style.opacity = "0";
+
+        const rect = envelope.getBoundingClientRect();
+        window.spawnHeartBurst?.(rect.left + rect.width / 2, rect.top + rect.height / 2, 12);
+
+        if (window.gsap && !prefersReducedMotion()) {
+          const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+
+          // 1) Seal pops away
+          tl.to(seal, { scale: 0, opacity: 0, duration: 0.3, ease: "back.in(1.4)" })
+            .to(stage, { height: window.innerWidth < 480 ? 260 : 300, duration: 0.7, ease: "power2.out" }, 0)
+
+            // 2) Flap opens upward
+            .to(
+              flap,
+              {
+                rotateX: 178,
+                duration: 0.75,
+                ease: "power2.inOut",
+                transformOrigin: "top center",
+              },
+              "-=0.05"
+            )
+
+            // 3) Letter becomes visible inside
+            .to(letter, { opacity: 1, duration: 0.2 }, "-=0.35")
+
+            // 4) Letter rises out of the envelope — stays centered on the mail
+            .add(() => letter.classList.add("is-out"))
+            .to(
+              letter,
+              {
+                y: window.innerWidth < 480 ? -100 : -120,
+                scale: 1,
+                duration: 0.9,
+                ease: "power3.out",
+              },
+              "-=0.1"
+            )
+            .to(
+              letter,
+              {
+                boxShadow: "0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(196,92,122,0.25)",
+                duration: 0.4,
+              },
+              "-=0.4"
+            )
+
+            // 5) Soft settle, then message
+            .to(letter, {
+              y: window.innerWidth < 480 ? -92 : -110,
+              duration: 0.35,
+              ease: "power1.inOut",
+            })
+            .add(() => showMessage(), "+=0.15");
+        } else {
+          flap.style.transform = "rotateX(178deg)";
+          seal.style.opacity = "0";
+          letter.classList.add("is-out");
+          letter.style.opacity = "1";
+          letter.style.transform = "translateX(-50%) translateY(-108px) scale(1)";
+          showMessage();
+        }
+      }
+
+      function showMessage() {
+        reveal.hidden = false;
+        reveal.classList.add("is-visible");
+        const lines = $$("p", reveal);
+        if (window.gsap && !prefersReducedMotion()) {
+          gsap.fromTo(
+            lines,
+            { opacity: 0, y: 20 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.85,
+              stagger: 0.5,
+              ease: "power2.out",
+            }
+          );
+        } else {
+          lines.forEach((p) => (p.style.opacity = "1"));
+        }
+      }
+
+      envelope.addEventListener("click", openEnvelope);
+      envelope.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openEnvelope();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

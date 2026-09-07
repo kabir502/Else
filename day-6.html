@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="The final countdown before Nida's birthday." />
+  <meta property="og:title" content="Nida ❤️ — The Countdown" />
+  <meta property="og:description" content="Tomorrow is YOUR day." />
+  <title>Day 6 — The Countdown | Nida ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: #000; }
+  </style>
+</head>
+<body>
+  <div class="bg-layer" style="background:#000" aria-hidden="true"></div>
+
+  <main class="page hero" id="day6-main">
+    <p class="suspense-text" id="line-a" style="opacity:0">Nida...</p>
+    <p class="suspense-text" id="line-b" style="opacity:0;margin-top:1rem">Tomorrow isn't just another day.</p>
+    <p class="suspense-text" id="line-c" style="opacity:0;margin-top:1rem">Tomorrow is YOUR day.</p>
+
+    <div
+      class="countdown countdown--huge countdown--hours-only"
+      id="final-countdown"
+      data-countdown
+      style="opacity:0;margin-top:2.5rem"
+      aria-label="Hours until birthday"
+    ></div>
+
+    <div class="pulse-heart" id="pulse-heart" style="opacity:0" aria-hidden="true">
+      <svg viewBox="0 0 64 64" fill="currentColor">
+        <path d="M32 56 S4 36 4 22 C4 12 14 8 22 14 C26 17 32 24 32 24 C32 24 38 17 42 14 C50 8 60 12 60 22 C60 36 32 56 32 56 Z"/>
+      </svg>
+    </div>
+
+    <div class="do-not-open" id="surprise-wrap" style="opacity:0">
+      <button type="button" class="btn btn-gold magnetic" id="last-surprise-btn">
+        One Last Surprise...
+      </button>
+      <p class="lock-message" id="lock-message">Come back on September 15 ❤️</p>
+    </div>
+
+    <p class="made-with-love" id="sleep-well" style="opacity:0;margin-top:2rem">
+      Until then...<br />Sleep well, birthday girl.
+    </p>
+  </main>
+
+  <button class="music-btn" type="button" aria-label="Toggle music">
+    <span class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+    <span class="music-label">♫ Play our song</span>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/countdown.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const { bootCommon, $, prefersReducedMotion } = window.birthdayUtils;
+      bootCommon({ count: 60, hearts: true, speed: 0.3 });
+
+      initCountdown("#final-countdown", { showDays: false });
+
+      const lineA = $("#line-a");
+      const lineB = $("#line-b");
+      const lineC = $("#line-c");
+      const countdown = $("#final-countdown");
+      const heart = $("#pulse-heart");
+      const wrap = $("#surprise-wrap");
+      const btn = $("#last-surprise-btn");
+      const msg = $("#lock-message");
+      const sleep = $("#sleep-well");
+
+      if (window.gsap && !prefersReducedMotion()) {
+        const tl = gsap.timeline({ delay: 0.6 });
+        tl.to(lineA, { opacity: 1, duration: 1.2 })
+          .to(lineA, { opacity: 0.35, duration: 0.6 }, "+=0.8")
+          .to(lineB, { opacity: 1, duration: 1.2 })
+          .to(lineC, { opacity: 1, duration: 1.2 }, "+=0.7")
+          .to([countdown, heart], { opacity: 1, duration: 1, stagger: 0.15 }, "+=0.4")
+          .to(wrap, { opacity: 1, duration: 0.8 }, "+=0.3")
+          .to(sleep, { opacity: 1, duration: 1 }, "+=0.2");
+
+        gsap.to(heart, {
+          scale: 1.12,
+          duration: 0.9,
+          yoyo: true,
+          repeat: -1,
+          ease: "sine.inOut",
+        });
+      } else {
+        [lineA, lineB, lineC, countdown, heart, wrap, sleep].forEach((el) => {
+          if (el) el.style.opacity = "1";
+        });
+      }
+
+      btn.addEventListener("click", () => {
+        if (window.gsap && !prefersReducedMotion()) {
+          gsap.to(msg, { opacity: 1, y: 0, duration: 0.8 });
+          gsap.fromTo(btn, { scale: 1 }, { scale: 0.96, duration: 0.15, yoyo: true, repeat: 1 });
+        } else {
+          msg.style.opacity = "1";
+        }
+        window.spawnHeartBurst?.(
+          btn.getBoundingClientRect().left + 80,
+          btn.getBoundingClientRect().top,
+          10
+        );
+      });
+    });
+  </script>
+</body>
+</html>

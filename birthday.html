@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050508" />
+  <meta name="description" content="Something special is waiting for Nida." />
+  <meta property="og:title" content="Nida ❤️ — Something Special" />
+  <meta property="og:description" content="Something special is waiting for you..." />
+  <meta property="og:type" content="website" />
+  <title>Nida ❤️ — Something Special</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bg-layer bg-gradient vignette" aria-hidden="true"></div>
+
+  <!-- Password lock -->
+  <section class="lock-screen" id="lock-screen" aria-labelledby="lock-title">
+    <div class="early-notice" id="early-notice" hidden>
+      <p>The final surprise isn't ready yet ❤️</p>
+      <div class="countdown" id="early-countdown"></div>
+      <p class="muted" style="font-size:0.85rem;margin-top:0.75rem">
+        You can still unlock it if you know the secret.
+      </p>
+    </div>
+
+    <svg class="lock-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <rect x="14" y="28" width="36" height="28" rx="4" />
+      <path d="M22 28 v-8 a10 10 0 0 1 20 0 v8" />
+      <circle cx="32" cy="42" r="3" fill="currentColor" />
+    </svg>
+
+    <h1 class="lock-screen__title" id="lock-title">Something special is waiting for you...</h1>
+
+    <form class="lock-form" id="lock-form" autocomplete="off">
+      <label class="sr-only" for="password-input">Enter the secret password</label>
+      <input
+        class="lock-input"
+        id="password-input"
+        type="password"
+        inputmode="numeric"
+        placeholder="Enter the secret password"
+        maxlength="20"
+        required
+      />
+      <button type="submit" class="btn btn-primary magnetic">Unlock My Heart ❤️</button>
+      <p class="lock-error" id="lock-error" role="alert"></p>
+    </form>
+  </section>
+
+  <div id="unlock-reveal" hidden style="position:fixed;inset:0;z-index:7100;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;pointer-events:none">
+    <p class="unlock-line page-title" style="opacity:0">Happy Birthday, Nida ❤️</p>
+    <p class="unlock-line page-subtitle" style="opacity:0;color:var(--gold)">September 15</p>
+    <p class="unlock-line" style="opacity:0;font-family:var(--font-display);font-size:1.25rem">
+      Today is all about you.
+    </p>
+  </div>
+
+  <div class="unlock-overlay" id="unlock-overlay" aria-hidden="true">
+    <div class="unlock-burst"></div>
+  </div>
+
+  <!-- Unlocked birthday experience -->
+  <div class="birthday-content" id="birthday-content" hidden>
+
+    <!-- HERO -->
+    <section class="birthday-hero" aria-label="Happy Birthday hero">
+      <div class="glow-heart-bg" aria-hidden="true"></div>
+      <div class="ornament" aria-hidden="true">
+        <span class="ornament__line"></span>
+        <span class="ornament__diamond">✦</span>
+        <span class="ornament__line"></span>
+      </div>
+      <p class="birthday-hero__date" style="opacity:0">September 15</p>
+      <p class="birthday-hero__label">Happy Birthday</p>
+      <h1 class="birthday-hero__name">Nida ❤️</h1>
+      <p class="birthday-hero__from">From Kabir</p>
+      <div class="ornament" aria-hidden="true" style="margin-top:1.75rem">
+        <span class="ornament__line"></span>
+        <span class="ornament__diamond">✧</span>
+        <span class="ornament__line"></span>
+      </div>
+      <p class="scroll-hint" aria-hidden="true">Scroll gently</p>
+    </section>
+
+    <!-- EPIGRAPH -->
+    <section class="section bday-section" aria-label="Dedication">
+      <div class="container narrow">
+        <blockquote class="epigraph" data-scroll="blur">
+          <p>“Some people arrive in your life and quietly become home.”</p>
+          <footer>— for Nida, always</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- MESSAGE -->
+    <section class="section bday-section" aria-labelledby="message-heading">
+      <div class="container narrow">
+        <div class="section-head">
+          <span class="chapter-tag">A Message</span>
+          <h2 class="page-title" id="message-heading" data-scroll>Today, I just want you to know...</h2>
+        </div>
+        <div class="message-stack elegant-stack">
+          <p>You deserve every beautiful thing life has to offer.</p>
+          <p>Your smile has a way of making everything feel a little lighter.</p>
+          <p>I hope this year brings you countless reasons to smile.</p>
+          <p>And I hope I get to be there for many of those moments.</p>
+          <p>Happy Birthday to someone who means more to me than words can explain.</p>
+          <p>Always keep smiling, Nida.</p>
+          <p class="message-sign">With love,<br />Kabir ❤️</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- WISHES -->
+    <section class="section bday-section" aria-labelledby="wishes-heading">
+      <div class="container">
+        <div class="section-head">
+          <span class="chapter-tag">For This Year</span>
+          <h2 class="page-title" id="wishes-heading" data-scroll>My wishes for you</h2>
+          <p class="page-subtitle">Soft ones. Honest ones. Yours.</p>
+        </div>
+        <ul class="wish-list">
+          <li class="wish-item" data-scroll>
+            <span class="wish-item__mark">I.</span>
+            <div>
+              <h3>Peace</h3>
+              <p>Mornings that feel unhurried, and nights that feel safe.</p>
+            </div>
+          </li>
+          <li class="wish-item" data-scroll>
+            <span class="wish-item__mark">II.</span>
+            <div>
+              <h3>Laughter</h3>
+              <p>The kind that finds you even on ordinary Tuesdays.</p>
+            </div>
+          </li>
+          <li class="wish-item" data-scroll>
+            <span class="wish-item__mark">III.</span>
+            <div>
+              <h3>Courage</h3>
+              <p>To choose yourself — gently, firmly, again and again.</p>
+            </div>
+          </li>
+          <li class="wish-item" data-scroll>
+            <span class="wish-item__mark">IV.</span>
+            <div>
+              <h3>Wonder</h3>
+              <p>Little moments that still manage to surprise you.</p>
+            </div>
+          </li>
+          <li class="wish-item" data-scroll>
+            <span class="wish-item__mark">V.</span>
+            <div>
+              <h3>Love</h3>
+              <p>The steady kind — including mine, always near.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="section bday-section" aria-labelledby="gallery-heading">
+      <div class="container">
+        <div class="section-head">
+          <span class="chapter-tag">Portraits of Us</span>
+          <h2 class="page-title" id="gallery-heading" data-scroll>A few favorite frames</h2>
+          <p class="page-subtitle">Tap to view</p>
+        </div>
+        <div class="final-gallery classic-gallery">
+          <div class="gallery-item" role="button" tabindex="0" aria-label="View photo of Nida">
+            <img src="assets/images/nida-1.jpg" alt="Nida" loading="lazy" data-fallback="Beautiful, as always." />
+            <div class="gallery-item__caption">Beautiful, as always.</div>
+          </div>
+          <div class="gallery-item" role="button" tabindex="0" aria-label="View second photo of Nida">
+            <img src="assets/images/nida-2.jpg" alt="Nida smiling" loading="lazy" data-fallback="Beautiful, as always." />
+            <div class="gallery-item__caption">Beautiful, as always.</div>
+          </div>
+          <div class="gallery-item" role="button" tabindex="0" aria-label="View photo of us">
+            <img src="assets/images/couple-1.jpg" alt="Kabir and Nida" loading="lazy" data-fallback="Us." />
+            <div class="gallery-item__caption">Us.</div>
+          </div>
+          <div class="gallery-item" role="button" tabindex="0" aria-label="View another photo of us">
+            <img src="assets/images/couple-2.jpg" alt="Kabir and Nida together" loading="lazy" data-fallback="Us." />
+            <div class="gallery-item__caption">Us.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REASONS -->
+    <section class="section bday-section" aria-labelledby="reasons-heading">
+      <div class="container narrow">
+        <div class="section-head">
+          <span class="chapter-tag">Quiet Truths</span>
+          <h2 class="page-title" id="reasons-heading" data-scroll>Why you matter to me</h2>
+        </div>
+        <div class="reason-grid">
+          <article class="reason-card" data-scroll>The way your presence softens a room.</article>
+          <article class="reason-card" data-scroll>How you care — without needing an audience.</article>
+          <article class="reason-card" data-scroll>Your smile, which somehow resets the day.</article>
+          <article class="reason-card" data-scroll>The comfort of simply being beside you.</article>
+          <article class="reason-card" data-scroll>Your mind — curious, kind, entirely you.</article>
+          <article class="reason-card" data-scroll>Every ordinary moment that becomes special with you.</article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROMISES -->
+    <section class="section bday-section" aria-labelledby="promises-heading">
+      <div class="container narrow">
+        <div class="section-head">
+          <span class="chapter-tag">From Me to You</span>
+          <h2 class="page-title" id="promises-heading" data-scroll>A few promises</h2>
+        </div>
+        <ol class="promise-list">
+          <li data-scroll>To keep choosing kindness with you.</li>
+          <li data-scroll>To celebrate you on more days than just this one.</li>
+          <li data-scroll>To keep making memories worth keeping.</li>
+          <li data-scroll>To stay — in the quiet ways that matter.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- MONOGRAM -->
+    <section class="section bday-section monogram-section" aria-label="Kabir and Nida">
+      <div class="container text-center">
+        <div class="monogram" data-scroll="scale">
+          <span>K</span>
+          <span class="monogram__heart" aria-hidden="true">♥</span>
+          <span>N</span>
+        </div>
+        <p class="monogram-caption">Kabir × Nida</p>
+        <p class="muted" style="margin-top:0.75rem;font-size:0.85rem;letter-spacing:0.12em">EST. in the heart</p>
+      </div>
+    </section>
+
+    <!-- TAP HEART -->
+    <section class="section tap-heart-wrap bday-section" aria-labelledby="tap-heading">
+      <div class="section-head">
+        <span class="chapter-tag">A Little Game</span>
+        <h2 class="page-title" id="tap-heading">Tap the heart...</h2>
+      </div>
+      <button type="button" class="tap-heart" id="tap-heart" aria-label="Send love">
+        <svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">
+          <path d="M32 56 S4 36 4 22 C4 12 14 8 22 14 C26 17 32 24 32 24 C32 24 38 17 42 14 C50 8 60 12 60 22 C60 36 32 56 32 56 Z"/>
+        </svg>
+      </button>
+      <p class="heart-messages" id="heart-messages" aria-live="polite"></p>
+      <div id="heart-after" hidden>
+        <p class="page-subtitle" style="color:var(--pink-soft)">Okay... I think you've sent enough love ❤️</p>
+        <p class="muted">Although... can you ever send too much?</p>
+      </div>
+    </section>
+
+    <!-- LOVE METER -->
+    <section class="section bday-section" aria-labelledby="meter-heading">
+      <div class="love-meter">
+        <div class="section-head">
+          <span class="chapter-tag">Scientific, Obviously</span>
+          <h2 class="page-title" id="meter-heading">How much does Kabir love Nida?</h2>
+        </div>
+        <p class="love-meter__value" id="love-value">0%</p>
+        <label class="sr-only" for="love-slider">Love meter</label>
+        <input type="range" id="love-slider" min="0" max="100" value="0" />
+        <p class="love-meter__label" id="love-label">Move the slider...</p>
+      </div>
+    </section>
+
+    <!-- CANDLE WISH -->
+    <section class="section bday-section" aria-labelledby="candle-heading">
+      <div class="container narrow text-center">
+        <div class="section-head">
+          <span class="chapter-tag">Make a Wish</span>
+          <h2 class="page-title" id="candle-heading" data-scroll>Blow out the candle</h2>
+          <p class="page-subtitle">Tap the flame — then wish for something beautiful.</p>
+        </div>
+        <button type="button" class="candle" id="candle-btn" aria-label="Blow out the candle">
+          <span class="candle__flame" id="candle-flame" aria-hidden="true"></span>
+          <span class="candle__wick" aria-hidden="true"></span>
+          <span class="candle__body" aria-hidden="true"></span>
+          <span class="candle__plate" aria-hidden="true"></span>
+        </button>
+        <p class="candle-wish" id="candle-wish" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <!-- FINAL -->
+    <section class="section bday-section text-center finale-section">
+      <div class="ornament" aria-hidden="true">
+        <span class="ornament__line"></span>
+        <span class="ornament__diamond">✦</span>
+        <span class="ornament__line"></span>
+      </div>
+      <p class="finale-lead" data-scroll>Whenever you're ready...</p>
+      <button type="button" class="btn btn-primary magnetic" id="final-surprise-btn">
+        One Last Thing...
+      </button>
+      <p class="made-with-love">Made with love, by Kabir.</p>
+    </section>
+  </div>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Photo viewer">
+    <button type="button" class="lightbox__close" id="lightbox-close" aria-label="Close">×</button>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <div class="final-sequence" id="final-sequence" aria-live="polite">
+    <p class="final-sequence__text" id="final-sequence-text"></p>
+  </div>
+
+  <button class="music-btn" type="button" aria-label="Toggle music">
+    <span class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+    <span class="music-label">♫ Play our song</span>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/TextPlugin.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/countdown.js"></script>
+  <script src="js/birthday.js"></script>
+</body>
+</html>

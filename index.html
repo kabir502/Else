@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050508" />
+  <meta name="description" content="A little surprise made for Nida, with love from Kabir." />
+  <meta property="og:title" content="Nida ❤️ — A Little Surprise" />
+  <meta property="og:description" content="Something special is waiting for you..." />
+  <meta property="og:type" content="website" />
+  <title>Nida ❤️ — A Little Surprise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bg-layer bg-gradient vignette" aria-hidden="true"></div>
+
+  <main class="page" id="intro">
+    <section class="hero" aria-labelledby="hero-name">
+      <p class="hero-line" id="hero-line-1">For Someone Very Special...</p>
+      <h1 class="hero-name" id="hero-name">Nida <span class="heart-glow" aria-hidden="true">❤️</span></h1>
+      <p class="hero-sub" id="hero-sub">Your birthday is getting closer...</p>
+
+      <div class="countdown countdown--huge" data-countdown aria-label="Countdown to Nida's birthday"></div>
+
+      <p class="closing-note" id="intro-note" style="opacity: 0; margin-bottom: 1.5rem">
+        A little surprise, made only for you.
+      </p>
+
+      <a
+        href="day-1.html"
+        class="btn btn-primary magnetic"
+        id="start-cta"
+        data-navigate
+        data-chapter="Chapter 1..."
+        style="opacity: 0"
+      >
+        Chapter One →
+      </a>
+
+      <p class="made-with-love" id="credit" style="opacity: 0">Made with love, by Kabir.</p>
+    </section>
+  </main>
+
+  <button class="music-btn" type="button" aria-label="Toggle music">
+    <span class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+    <span class="music-label">♫ Play our song</span>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/TextPlugin.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/countdown.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const { bootCommon, $, prefersReducedMotion, splitText } = window.birthdayUtils;
+      bootCommon({ count: 65, hearts: true });
+      initCountdown("[data-countdown]");
+
+      const reduced = prefersReducedMotion();
+      const line1 = $("#hero-line-1");
+      const name = $("#hero-name");
+      const sub = $("#hero-sub");
+      const note = $("#intro-note");
+      const cta = $("#start-cta");
+      const credit = $("#credit");
+      const countdown = $("[data-countdown]");
+
+      if (reduced || !window.gsap) {
+        [line1, name, sub, note, cta, credit, countdown].forEach((el) => {
+          if (el) el.style.opacity = "1";
+        });
+        return;
+      }
+
+      gsap.set([line1, name, sub, note, cta, credit], { opacity: 0 });
+      gsap.set(countdown, { opacity: 0, y: 30 });
+
+      const tl = gsap.timeline({ delay: 0.4 });
+
+      // Prepare name for letter reveal
+      name.innerHTML = '<span id="name-chars">Nida</span> <span class="heart-glow" aria-hidden="true">❤️</span>';
+      const nameChars = $("#name-chars");
+      const heart = name.querySelector(".heart-glow");
+      gsap.set(heart, { opacity: 0, scale: 0.5 });
+
+      tl.to(line1, { opacity: 1, duration: 1.2, ease: "power2.out" })
+        .add(() => {
+          const chars = splitText(nameChars);
+          gsap.set(name, { opacity: 1 });
+          gsap.set(nameChars, { opacity: 1 });
+          gsap.fromTo(
+            chars,
+            { opacity: 0, y: 40, filter: "blur(10px)" },
+            {
+              opacity: 1,
+              y: 0,
+              filter: "blur(0px)",
+              duration: 0.75,
+              stagger: 0.08,
+              ease: "power3.out",
+            }
+          );
+          gsap.to(heart, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.8,
+            delay: 0.45,
+            ease: "back.out(1.6)",
+          });
+        }, "+=0.35")
+        .to(sub, { opacity: 1, duration: 1, ease: "power2.out" }, "+=1.1")
+        .to(countdown, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" }, "-=0.2")
+        .to(note, { opacity: 1, duration: 0.8, ease: "power2.out" }, "-=0.2")
+        .to(cta, { opacity: 1, duration: 0.9, ease: "power2.out" }, "-=0.2")
+        .to(credit, { opacity: 1, duration: 0.8 }, "-=0.3");
+    });
+  </script>
+</body>
+</html>

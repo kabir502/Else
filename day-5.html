@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050508" />
+  <meta name="description" content="A cute quiz for Nida about us." />
+  <meta property="og:title" content="Nida ❤️ — How Well Do You Know Us?" />
+  <meta property="og:description" content="Okay Nida... let's see." />
+  <title>Day 5 — How Well Do You Know Us? | Nida ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bg-layer bg-gradient vignette" aria-hidden="true"></div>
+
+  <main class="page section">
+    <div class="container">
+      <div class="text-center">
+        <span class="chapter-tag">Chapter Five</span>
+        <h1 class="page-title">Okay Nida... Let's see how well you know us ❤️</h1>
+        <p class="page-subtitle">No pressure. Just vibes.</p>
+      </div>
+
+      <div class="quiz-card" id="quiz-card">
+        <div class="quiz-score" id="quiz-score">Score: 0 / 5</div>
+        <div class="quiz-progress" id="quiz-progress" aria-hidden="true"></div>
+        <h2 class="quiz-question" id="quiz-question"></h2>
+        <div class="quiz-options" id="quiz-options"></div>
+        <p class="quiz-feedback" id="quiz-feedback" aria-live="polite"></p>
+      </div>
+
+      <div class="quiz-result" id="quiz-result">
+        <p class="page-title" style="font-size: clamp(1.4rem, 4vw, 2rem)">
+          Whether you got everything right or not...
+        </p>
+        <p class="page-subtitle" style="font-size: 1.15rem; color: var(--pink-soft)">
+          You're still my favorite person.
+        </p>
+        <p class="closing-note" style="margin-top:1.5rem">Tomorrow is the big day... ❤️</p>
+        <p class="made-with-love">Made with love, by Kabir.</p>
+      </div>
+    </div>
+  </main>
+
+  <button class="music-btn" type="button" aria-label="Toggle music">
+    <span class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+    <span class="music-label">♫ Play our song</span>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const { bootCommon, $, $$, prefersReducedMotion } = window.birthdayUtils;
+      bootCommon({ count: 50, hearts: true });
+
+      const questions = [
+        {
+          q: "Who fell first?",
+          options: ["Kabir", "Nida", "At the exact same millisecond", "The universe decided"],
+          correct: 0,
+          responses: [
+            "Correct. Kabir never stood a chance 😌",
+            "Nice try — but Kabir was gone from day one.",
+            "Romantic... but Kabir still fell first.",
+            "Poetic. Also: Kabir fell first.",
+          ],
+        },
+        {
+          q: "Who is more dramatic?",
+          options: ["Kabir", "Nida", "It depends on the day", "Both. Absolutely both."],
+          correct: 3,
+          responses: [
+            "He has his moments... but be honest.",
+            "She has range — still, look at option 4.",
+            "Fair. But the true answer is both.",
+            "YES. The couple that overreacts together stays together.",
+          ],
+        },
+        {
+          q: "Who says sorry first?",
+          options: ["Kabir", "Nida", "Whoever loves harder that day", "Neither — we wait it out"],
+          correct: 0,
+          responses: [
+            "Kabir folded. As expected ❤️",
+            "Sometimes... but Kabir usually breaks first.",
+            "Cute theory. Kabir still says it first.",
+            "Dangerous strategy. Kabir caves anyway.",
+          ],
+        },
+        {
+          q: "Who misses the other person more?",
+          options: ["Kabir", "Nida", "Equal missing rights", "Can't measure — it's illegal"],
+          correct: 0,
+          responses: [
+            "Obviously Kabir. It's a lifestyle.",
+            "Debatable... but Kabir would argue harder.",
+            "Sweet. Kabir still thinks he wins this.",
+            "Correct energy. Answer still: Kabir.",
+          ],
+        },
+        {
+          q: "Who loves the other more?",
+          options: ["Kabir", "Nida", "It's not a competition", "∞ — calculation failed"],
+          correct: 3,
+          responses: [
+            "True from his side — but check the last option.",
+            "Also true — still, go look at ∞.",
+            "Mature answer. Also: ∞",
+            "ERROR: love overflow. Perfect score energy.",
+          ],
+        },
+      ];
+
+      let index = 0;
+      let score = 0;
+      let locked = false;
+
+      const progress = $("#quiz-progress");
+      const questionEl = $("#quiz-question");
+      const optionsEl = $("#quiz-options");
+      const feedbackEl = $("#quiz-feedback");
+      const scoreEl = $("#quiz-score");
+      const card = $("#quiz-card");
+      const result = $("#quiz-result");
+
+      questions.forEach((_, i) => {
+        const dot = document.createElement("span");
+        dot.className = "quiz-dot" + (i === 0 ? " active" : "");
+        progress.appendChild(dot);
+      });
+
+      function updateProgress() {
+        $$(".quiz-dot", progress).forEach((d, i) => {
+          d.classList.toggle("active", i === index);
+          d.classList.toggle("done", i < index);
+        });
+      }
+
+      function renderQuestion() {
+        locked = false;
+        const current = questions[index];
+        questionEl.textContent = current.q;
+        feedbackEl.textContent = "";
+        optionsEl.innerHTML = "";
+        scoreEl.textContent = `Score: ${score} / ${questions.length}`;
+        updateProgress();
+
+        current.options.forEach((opt, i) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "quiz-option";
+          btn.textContent = opt;
+          btn.addEventListener("click", () => selectAnswer(i));
+          optionsEl.appendChild(btn);
+        });
+
+        if (window.gsap && !prefersReducedMotion()) {
+          gsap.fromTo(
+            [questionEl, ...$$(".quiz-option")],
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 0.45, stagger: 0.06 }
+          );
+        }
+      }
+
+      function selectAnswer(i) {
+        if (locked) return;
+        locked = true;
+        const current = questions[index];
+        const isCorrect = i === current.correct;
+        if (isCorrect) score += 1;
+
+        feedbackEl.textContent = current.responses[i];
+        scoreEl.textContent = `Score: ${score} / ${questions.length}`;
+
+        const rect = optionsEl.getBoundingClientRect();
+        window.spawnHeartBurst?.(rect.left + rect.width / 2, rect.top, isCorrect ? 14 : 6);
+
+        if (window.gsap) {
+          gsap.fromTo(feedbackEl, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.35 });
+        }
+
+        setTimeout(() => {
+          index += 1;
+          if (index >= questions.length) showResult();
+          else renderQuestion();
+        }, 1600);
+      }
+
+      function showResult() {
+        if (window.gsap && !prefersReducedMotion()) {
+          gsap.to(card, {
+            opacity: 0,
+            y: -20,
+            duration: 0.5,
+            onComplete: () => {
+              card.style.display = "none";
+              result.classList.add("is-visible");
+              gsap.fromTo(result, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 });
+            },
+          });
+        } else {
+          card.style.display = "none";
+          result.classList.add("is-visible");
+        }
+        window.spawnHeartBurst?.(window.innerWidth / 2, window.innerHeight / 2, 18);
+      }
+
+      renderQuestion();
+    });
+  </script>
+</body>
+</html>

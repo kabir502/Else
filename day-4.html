@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0c080a" />
+  <meta name="description" content="A letter from Kabir to Nida." />
+  <meta property="og:title" content="Nida ❤️ — A Letter from Kabir" />
+  <meta property="og:description" content="Dear Nida..." />
+  <title>Day 4 — A Letter from Kabir | Nida ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="letter-page">
+  <div class="bg-layer vignette" aria-hidden="true"></div>
+
+  <main class="page section">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 2rem">
+        <span class="chapter-tag">Chapter Four</span>
+        <h1 class="page-title">A Letter from Kabir</h1>
+      </div>
+
+      <article class="letter-paper" aria-label="Letter to Nida">
+        <p class="letter-greeting" id="letter-greeting">Dear Nida...</p>
+        <div class="letter-body" id="letter-body" aria-live="polite"></div>
+        <div class="letter-sign" id="letter-sign">
+          With all my love,<br />
+          Kabir ❤️
+        </div>
+        <svg class="heart-svg" id="heart-svg" viewBox="0 0 64 64" aria-hidden="true">
+          <path
+            id="heart-path"
+            d="M32 56 S4 36 4 22 C4 12 14 8 22 14 C26 17 32 24 32 24 C32 24 38 17 42 14 C50 8 60 12 60 22 C60 36 32 56 32 56 Z"
+          />
+        </svg>
+      </article>
+
+      <p class="closing-note text-center" style="margin-top:2.5rem">With all my love — Kabir ❤️</p>
+    </div>
+  </main>
+
+  <button class="music-btn" type="button" aria-label="Toggle music">
+    <span class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+    <span class="music-label">♫ Play our song</span>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const { bootCommon, $, prefersReducedMotion } = window.birthdayUtils;
+      bootCommon({ count: 35, hearts: false, color: "rgba(212, 184, 150, 0.4)", speed: 0.2 });
+
+      const letterText =
+`I keep thinking about how quietly you changed everything.
+
+Having you in my life feels like finding a place that finally makes sense — warm, steady, and somehow still exciting. Your smile softens the hardest days. Your personality makes ordinary evenings feel like something worth remembering.
+
+I love the way you are with the world, and the way you are with me. The little conversations. The shared silences. The memories we've already made, and the ones I know are still waiting for us.
+
+As your birthday gets closer, I just want you to feel how deeply you're appreciated. Not only on September 15 — but in all the quiet moments between.
+
+I hope this year brings you peace, laughter, and every soft kind of happiness. And I promise to keep showing up — to keep creating beautiful memories with you.
+
+Happy birthday in advance, Nida.`;
+
+      const greeting = $("#letter-greeting");
+      const body = $("#letter-body");
+      const sign = $("#letter-sign");
+      const heartSvg = $("#heart-svg");
+      const heartPath = $("#heart-path");
+
+      if (window.gsap && !prefersReducedMotion()) {
+        await new Promise((r) => {
+          gsap.to(greeting, { opacity: 1, duration: 1, delay: 0.4, onComplete: r });
+        });
+        await window.anim.typewriter(body, letterText, { speed: 22, delay: 200 });
+        await new Promise((r) => {
+          gsap.to(sign, { opacity: 1, duration: 1, delay: 0.2, onComplete: r });
+        });
+
+        const length = heartPath.getTotalLength();
+        heartPath.style.strokeDasharray = length;
+        heartPath.style.strokeDashoffset = length;
+        gsap.set(heartSvg, { opacity: 1 });
+        gsap.to(heartPath, {
+          strokeDashoffset: 0,
+          duration: 1.6,
+          ease: "power2.inOut",
+          onComplete: () => {
+            gsap.to(heartPath, { fill: "rgba(196,92,122,0.35)", duration: 0.6 });
+          },
+        });
+      } else {
+        greeting.style.opacity = "1";
+        body.textContent = letterText;
+        sign.style.opacity = "1";
+        heartSvg.style.opacity = "1";
+        heartPath.style.fill = "rgba(196,92,122,0.35)";
+      }
+    });
+  </script>
+</body>
+</html>
