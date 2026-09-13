@@ -1,0 +1,1932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Surprise #5 · One Last Night</title>
+
+  <!-- GSAP + ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       RESET & GLOBAL
+       ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #050507;
+      color: #f0e8e0;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      cursor: none;
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+      body { cursor: auto; }
+      .custom-cursor { display: none !important; }
+    }
+
+    /* ============================================================
+       CUSTOM CURSOR
+       ============================================================ */
+    .custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      background: rgba(255, 215, 180, 0.9);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 100000;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s, background 0.3s, opacity 0.3s;
+      box-shadow: 0 0 20px rgba(255, 200, 160, 0.6), 0 0 60px rgba(255, 180, 140, 0.3);
+      mix-blend-mode: screen;
+    }
+
+    .custom-cursor.expand {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 215, 180, 0.15);
+      border: 1px solid rgba(255, 215, 180, 0.6);
+      box-shadow: 0 0 40px rgba(255, 200, 160, 0.4);
+    }
+
+    .custom-cursor .cursor-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #ffd9b3;
+      opacity: 0;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+    }
+
+    .custom-cursor.expand .cursor-label { opacity: 1; }
+
+    /* ============================================================
+       CANVAS BACKGROUND
+       ============================================================ */
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Film grain overlay */
+    .grain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      animation: grainShift 0.5s steps(3) infinite;
+    }
+
+    @keyframes grainShift {
+      0% { background-position: 0 0; }
+      33% { background-position: 40px -20px; }
+      66% { background-position: -30px 30px; }
+      100% { background-position: 20px -40px; }
+    }
+
+    /* Vignette overlay */
+    .vignette {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(5, 5, 7, 0.6) 80%, rgba(5, 5, 7, 0.95) 100%);
+    }
+
+    /* ============================================================
+       MAIN CONTENT WRAPPER
+       ============================================================ */
+    .content {
+      position: relative;
+      z-index: 5;
+    }
+
+    /* ============================================================
+       TYPOGRAPHY HELPERS
+       ============================================================ */
+    .serif { font-family: 'Playfair Display', serif; }
+    .serif-alt { font-family: 'Cormorant Garamond', serif; }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3.8rem);
+      font-weight: 400;
+      color: #f5e6d8;
+      letter-spacing: 1px;
+      line-height: 1.2;
+      text-shadow: 0 0 60px rgba(255, 200, 160, 0.15), 0 0 120px rgba(255, 180, 140, 0.08);
+    }
+
+    .section-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: 300;
+      color: #b8a89a;
+      letter-spacing: 2px;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .section-label {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+      font-weight: 400;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #9a7a6a;
+    }
+
+    /* ============================================================
+       SCENE 1 — TONIGHT
+       ============================================================ */
+    .scene-1 {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .scene-1 .line {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 5vw, 3.2rem);
+      font-weight: 400;
+      color: #f0e2d4;
+      letter-spacing: 1px;
+      line-height: 1.5;
+      margin: 0.4rem 0;
+      opacity: 0;
+      filter: blur(12px);
+    }
+
+    .scene-1 .line.emphasis {
+      font-size: clamp(2.2rem, 7vw, 4.5rem);
+      font-weight: 500;
+      color: #f7e8d8;
+      text-shadow: 0 0 80px rgba(255, 200, 160, 0.2);
+    }
+
+    .scene-1 .line.soft {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+      font-weight: 300;
+      color: #c4b0a0;
+      font-style: italic;
+    }
+
+    /* ============================================================
+       SCENE 2 — FIVE SURPRISES
+       ============================================================ */
+    .scene-2 {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    .dots-container {
+      display: flex;
+      gap: clamp(0.8rem, 3vw, 2.5rem);
+      margin: 3rem 0 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .dot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .dot-circle {
+      width: clamp(36px, 8vw, 64px);
+      height: clamp(36px, 8vw, 64px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(0.7rem, 2vw, 1rem);
+      font-weight: 400;
+      letter-spacing: 1px;
+      color: #f0d8c0;
+      border: 1px solid rgba(255, 200, 160, 0.3);
+      background: rgba(30, 20, 25, 0.4);
+      transition: box-shadow 0.6s, border-color 0.6s, transform 0.6s;
+    }
+
+    .dot-circle.done {
+      border-color: rgba(255, 200, 160, 0.5);
+      box-shadow: 0 0 20px rgba(255, 180, 140, 0.15), inset 0 0 12px rgba(255, 180, 140, 0.08);
+    }
+
+    .dot-circle.active {
+      border-color: rgba(255, 210, 170, 0.9);
+      box-shadow: 0 0 40px rgba(255, 180, 140, 0.4), 0 0 80px rgba(255, 150, 120, 0.15), inset 0 0 20px rgba(255, 200, 160, 0.15);
+      transform: scale(1.08);
+    }
+
+    .dot-label {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.55rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #8a6a5a;
+    }
+
+    .scene-2 .line {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 4vw, 2.4rem);
+      color: #e8d8c8;
+      letter-spacing: 1px;
+      line-height: 1.6;
+      opacity: 0;
+      filter: blur(8px);
+    }
+
+    .scene-2 .line.gold {
+      color: #f0d8b0;
+      text-shadow: 0 0 60px rgba(255, 200, 140, 0.25);
+    }
+
+    /* ============================================================
+       SCENE 3 — CARDS
+       ============================================================ */
+    .scene-3 {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      max-width: 900px;
+      width: 100%;
+      margin-top: 3rem;
+    }
+
+    .flip-card {
+      perspective: 1200px;
+      height: 260px;
+      cursor: none;
+    }
+
+    .flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-front, .flip-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .flip-front {
+      background: rgba(25, 18, 22, 0.6);
+      border: 1px solid rgba(255, 200, 160, 0.15);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 220, 190, 0.06);
+    }
+
+    .flip-front .card-number {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #8a6a5a;
+      margin-bottom: 1rem;
+    }
+
+    .flip-front .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      color: #f0d8c0;
+      letter-spacing: 1px;
+      margin-bottom: 0.8rem;
+    }
+
+    .flip-front .card-hint {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      color: #9a7a6a;
+      font-style: italic;
+      letter-spacing: 1px;
+    }
+
+    .flip-back {
+      background: linear-gradient(145deg, rgba(35, 22, 28, 0.9), rgba(20, 12, 16, 0.95));
+      border: 1px solid rgba(255, 200, 160, 0.3);
+      transform: rotateY(180deg);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 220, 190, 0.1);
+    }
+
+    .flip-back .card-content {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      color: #e8d8c8;
+      line-height: 1.7;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+
+    /* ============================================================
+       SCENE 4 — LETTER
+       ============================================================ */
+    .scene-4 {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    .letter-card {
+      max-width: 700px;
+      width: 100%;
+      background: linear-gradient(165deg, rgba(28, 18, 22, 0.9), rgba(15, 10, 12, 0.95));
+      border: 1px solid rgba(255, 200, 160, 0.12);
+      border-radius: 1.5rem;
+      padding: clamp(1.8rem, 4vw, 3.5rem);
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 220, 190, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .letter-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 200, 160, 0.2), transparent);
+    }
+
+    .letter-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+      color: #d8c8b8;
+      line-height: 1.9;
+      font-weight: 300;
+      letter-spacing: 0.3px;
+      opacity: 0;
+      transform: translateY(12px);
+      margin-bottom: 0.3rem;
+    }
+
+    .letter-line.signature {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: #f0d8c0;
+      font-style: italic;
+      margin-top: 0.5rem;
+    }
+
+    /* ============================================================
+       SCENE 5 — COUNTDOWN
+       ============================================================ */
+    .scene-5 {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      position: relative;
+      text-align: center;
+    }
+
+    .countdown-wrapper {
+      position: relative;
+      width: clamp(260px, 55vw, 420px);
+      height: clamp(260px, 55vw, 420px);
+      margin: 2rem auto;
+    }
+
+    .countdown-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 200, 160, 0.08);
+    }
+
+    .countdown-ring svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .countdown-ring circle {
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+    }
+
+    .countdown-ring .track {
+      stroke: rgba(255, 200, 160, 0.06);
+    }
+
+    .countdown-ring .progress {
+      stroke: url(#ringGradient);
+      stroke-dasharray: 1130;
+      stroke-dashoffset: 0;
+      filter: drop-shadow(0 0 12px rgba(255, 180, 140, 0.5));
+      transition: stroke-dashoffset 1s linear;
+    }
+
+    .countdown-display {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .countdown-numbers {
+      display: flex;
+      align-items: baseline;
+      gap: clamp(0.3rem, 1.5vw, 0.8rem);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .countdown-numbers .num {
+      font-size: clamp(2.2rem, 9vw, 4.8rem);
+      font-weight: 400;
+      color: #f5e6d8;
+      letter-spacing: 2px;
+      text-shadow: 0 0 40px rgba(255, 200, 160, 0.2), 0 0 80px rgba(255, 180, 140, 0.1);
+      min-width: 1.2em;
+      text-align: center;
+    }
+
+    .countdown-numbers .sep {
+      font-size: clamp(1.5rem, 5vw, 3rem);
+      color: #8a6a5a;
+      opacity: 0.5;
+      animation: pulseSep 2s infinite;
+    }
+
+    @keyframes pulseSep {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.7; }
+    }
+
+    .countdown-labels {
+      display: flex;
+      gap: clamp(0.3rem, 1.5vw, 0.8rem);
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(0.45rem, 1.2vw, 0.6rem);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #7a5a4a;
+    }
+
+    .countdown-labels span {
+      min-width: 3.5em;
+      text-align: center;
+    }
+
+    .countdown-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: #b8a89a;
+      font-style: italic;
+      letter-spacing: 2px;
+      margin-top: 1.5rem;
+    }
+
+    /* ============================================================
+       SCENE 6 — LOCKED BOX
+       ============================================================ */
+    .scene-6 {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .locked-box {
+      width: clamp(180px, 40vw, 260px);
+      height: clamp(180px, 40vw, 260px);
+      margin: 2.5rem auto;
+      position: relative;
+      cursor: none;
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .locked-box:hover {
+      transform: scale(1.04);
+    }
+
+    .locked-box .box-body {
+      width: 100%;
+      height: 100%;
+      border-radius: 1.5rem;
+      background: linear-gradient(145deg, rgba(30, 20, 25, 0.8), rgba(15, 10, 12, 0.9));
+      border: 1px solid rgba(255, 200, 160, 0.2);
+      box-shadow: 0 0 60px rgba(255, 180, 140, 0.1), inset 0 0 40px rgba(255, 200, 160, 0.03);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .locked-box .box-body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 1.5rem;
+      background: radial-gradient(circle at 50% 30%, rgba(255, 200, 160, 0.06), transparent 70%);
+    }
+
+    .locked-box .lock-icon {
+      font-size: clamp(2rem, 5vw, 3rem);
+      filter: drop-shadow(0 0 20px rgba(255, 180, 140, 0.3));
+      position: relative;
+      z-index: 2;
+    }
+
+    .locked-box .lock-text {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(0.55rem, 1.5vw, 0.7rem);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #b89a8a;
+      position: relative;
+      z-index: 2;
+    }
+
+    .locked-box .glow-ring {
+      position: absolute;
+      inset: -2px;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 200, 160, 0.15);
+      animation: boxGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes boxGlow {
+      0% { box-shadow: 0 0 30px rgba(255, 180, 140, 0.05); border-color: rgba(255, 200, 160, 0.1); }
+      100% { box-shadow: 0 0 60px rgba(255, 180, 140, 0.15); border-color: rgba(255, 200, 160, 0.25); }
+    }
+
+    .scene-6 .line {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3.5vw, 2rem);
+      color: #e8d8c8;
+      letter-spacing: 1px;
+      line-height: 1.6;
+      opacity: 0;
+      filter: blur(8px);
+    }
+
+    .scene-6 .line.gold {
+      color: #f0d8b0;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      text-shadow: 0 0 60px rgba(255, 200, 140, 0.25);
+    }
+
+    /* ============================================================
+       SCENE 7 — MEMORY SLIDESHOW
+       ============================================================ */
+    .scene-7 {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    .slideshow-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      aspect-ratio: 16 / 10;
+      border-radius: 1.2rem;
+      overflow: hidden;
+      background: #0d0b12;
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 200, 160, 0.08);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1.8s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.7) contrast(1.05);
+    }
+
+    .slide .placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #1a1218, #0d0a0e);
+      color: #5a4a42;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      font-style: italic;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .slide .placeholder .ph-icon {
+      font-size: 2.5rem;
+      opacity: 0.3;
+    }
+
+    .slide-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 3rem 2rem 1.8rem;
+      background: linear-gradient(transparent, rgba(5, 5, 7, 0.9));
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      color: #e8d8c8;
+      letter-spacing: 1px;
+      font-style: italic;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 1s 0.5s, transform 1s 0.5s;
+    }
+
+    .slide.active .slide-caption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       SCENE 8 — PROMISE
+       ============================================================ */
+    .scene-8 {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .promise-btn {
+      display: inline-block;
+      margin-top: 2.5rem;
+      padding: 1rem 2.8rem;
+      border-radius: 60px;
+      background: rgba(255, 200, 160, 0.06);
+      border: 1px solid rgba(255, 200, 160, 0.3);
+      color: #f0d8c0;
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(0.85rem, 2vw, 1rem);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: none;
+      transition: background 0.4s, box-shadow 0.4s, border-color 0.4s, transform 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .promise-btn:hover {
+      background: rgba(255, 200, 160, 0.12);
+      border-color: rgba(255, 200, 160, 0.6);
+      box-shadow: 0 0 40px rgba(255, 180, 140, 0.2), 0 0 80px rgba(255, 150, 120, 0.08);
+      transform: scale(1.03);
+    }
+
+    .promise-btn.promised {
+      pointer-events: none;
+      opacity: 0.5;
+      border-color: rgba(255, 200, 160, 0.15);
+      background: rgba(255, 200, 160, 0.03);
+    }
+
+    .promise-reveal {
+      margin-top: 2rem;
+    }
+
+    .promise-reveal .line {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3.5vw, 2rem);
+      color: #e8d8c8;
+      letter-spacing: 1px;
+      line-height: 1.6;
+      opacity: 0;
+      filter: blur(8px);
+    }
+
+    .promise-reveal .line.gold {
+      color: #f0d8b0;
+      text-shadow: 0 0 60px rgba(255, 200, 140, 0.25);
+    }
+
+    /* ============================================================
+       SCENE 9 — FINAL
+       ============================================================ */
+    .scene-9 {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .scene-9 .line {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3.5vw, 2rem);
+      color: #e8d8c8;
+      letter-spacing: 1px;
+      line-height: 1.6;
+      opacity: 0;
+      filter: blur(8px);
+      margin: 0.3rem 0;
+    }
+
+    .scene-9 .line.gold {
+      color: #f0d8b0;
+      font-size: clamp(2rem, 6vw, 3.8rem);
+      text-shadow: 0 0 80px rgba(255, 200, 140, 0.3);
+    }
+
+    .scene-9 .line.small {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.8rem, 2vw, 1rem);
+      color: #9a7a6a;
+      font-style: italic;
+      letter-spacing: 2px;
+      margin-top: 1rem;
+    }
+
+    /* ============================================================
+       FINAL COUNTDOWN SCREEN
+       ============================================================ */
+    .final-screen {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      text-align: center;
+      position: relative;
+      background: #050507;
+    }
+
+    .final-screen .line {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 3vw, 1.6rem);
+      color: #b8a89a;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0;
+      filter: blur(8px);
+      margin: 0.3rem 0;
+    }
+
+    .final-screen .line.big {
+      font-size: clamp(2rem, 6vw, 3.8rem);
+      color: #f0d8b0;
+      text-transform: none;
+      letter-spacing: 1px;
+      text-shadow: 0 0 80px rgba(255, 200, 140, 0.2);
+    }
+
+    .final-screen .line.date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      color: #d8c8b8;
+      font-style: italic;
+      letter-spacing: 2px;
+      text-transform: none;
+    }
+
+    .final-countdown {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 5vw, 3rem);
+      color: #f5e6d8;
+      letter-spacing: 3px;
+      margin-top: 2rem;
+      opacity: 0;
+      filter: blur(8px);
+      text-shadow: 0 0 60px rgba(255, 200, 160, 0.15);
+    }
+
+    /* ============================================================
+       MUSIC BUTTON
+       ============================================================ */
+    .music-btn {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 9999;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(30, 20, 25, 0.6);
+      border: 1px solid rgba(255, 200, 160, 0.2);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s;
+      color: #b89a8a;
+      font-size: 1rem;
+    }
+
+    .music-btn:hover {
+      background: rgba(40, 28, 34, 0.8);
+      border-color: rgba(255, 200, 160, 0.5);
+      transform: scale(1.08);
+      color: #f0d8c0;
+    }
+
+    .music-btn.playing {
+      border-color: rgba(255, 200, 160, 0.6);
+      color: #f0d8b0;
+      box-shadow: 0 0 30px rgba(255, 180, 140, 0.15);
+    }
+
+    /* ============================================================
+       REDUCED MOTION
+       ============================================================ */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .scene-1 .line,
+      .scene-2 .line,
+      .scene-6 .line,
+      .scene-9 .line,
+      .promise-reveal .line,
+      .letter-line,
+      .final-screen .line,
+      .final-countdown {
+        opacity: 1 !important;
+        filter: none !important;
+        transform: none !important;
+      }
+
+      .flip-card.flipped .flip-inner {
+        transform: rotateY(0deg);
+      }
+
+      .flip-back {
+        position: relative;
+        transform: none;
+      }
+
+      .flip-front {
+        display: none;
+      }
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 480px) {
+      .flip-card {
+        height: 230px;
+      }
+
+      .countdown-wrapper {
+        width: clamp(220px, 70vw, 300px);
+        height: clamp(220px, 70vw, 300px);
+      }
+
+      .slideshow-container {
+        aspect-ratio: 4 / 3;
+      }
+
+      .music-btn {
+        bottom: 1rem;
+        right: 1rem;
+        width: 38px;
+        height: 38px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .countdown-numbers .num {
+        font-size: 1.8rem;
+      }
+
+      .countdown-labels span {
+        font-size: 0.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div class="custom-cursor" id="customCursor">
+    <span class="cursor-label" id="cursorLabel"></span>
+  </div>
+
+  <!-- Particle canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Film grain + vignette -->
+  <div class="grain"></div>
+  <div class="vignette"></div>
+
+  <!-- Music button -->
+  <div class="music-btn" id="musicBtn" title="Play music">
+    <span id="musicIcon">♪</span>
+  </div>
+
+  <!-- ============================================================
+       MAIN CONTENT
+       ============================================================ -->
+  <div class="content">
+
+    <!-- SCENE 1 — TONIGHT -->
+    <section class="scene-1" id="scene1">
+      <div class="line" id="s1l1">September 14.</div>
+      <div class="line soft" id="s1l2">One night before your birthday.</div>
+      <div class="line emphasis" id="s1l3">Nida...</div>
+      <div class="line" id="s1l4">I wanted to make tonight a little special too.</div>
+    </section>
+
+    <!-- SCENE 2 — FIVE SURPRISES -->
+    <section class="scene-2" id="scene2">
+      <div class="section-label" id="s2label">Surprise #5</div>
+      <h2 class="section-title" id="s2title">The final little chapter</h2>
+      <p class="section-subtitle" id="s2sub">before tomorrow.</p>
+
+      <div class="dots-container" id="dotsContainer">
+        <div class="dot">
+          <div class="dot-circle done" data-index="0">01</div>
+          <span class="dot-label">Surprise</span>
+        </div>
+        <div class="dot">
+          <div class="dot-circle done" data-index="1">02</div>
+          <span class="dot-label">Surprise</span>
+        </div>
+        <div class="dot">
+          <div class="dot-circle done" data-index="2">03</div>
+          <span class="dot-label">Surprise</span>
+        </div>
+        <div class="dot">
+          <div class="dot-circle done" data-index="3">04</div>
+          <span class="dot-label">Surprise</span>
+        </div>
+        <div class="dot">
+          <div class="dot-circle active" data-index="4">05</div>
+          <span class="dot-label">Tonight</span>
+        </div>
+      </div>
+
+      <div class="line" id="s2line1">Five little surprises.</div>
+      <div class="line" id="s2line2">One birthday.</div>
+      <div class="line gold" id="s2line3">And tomorrow...</div>
+      <div class="line" id="s2line4">...the real celebration begins.</div>
+    </section>
+
+    <!-- SCENE 3 — CARDS -->
+    <section class="scene-3" id="scene3">
+      <div class="section-label" id="s3label">Before tomorrow arrives...</div>
+      <h2 class="section-title" id="s3title">There are a few things</h2>
+      <p class="section-subtitle" id="s3sub">I want you to know.</p>
+
+      <div class="cards-grid" id="cardsGrid">
+        <div class="flip-card" data-card="0">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <span class="card-number">01</span>
+              <span class="card-title">You Matter.</span>
+              <span class="card-hint">tap to reveal</span>
+            </div>
+            <div class="flip-back">
+              <p class="card-content">You've become someone whose happiness genuinely matters to me.</p>
+            </div>
+          </div>
+        </div>
+        <div class="flip-card" data-card="1">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <span class="card-number">02</span>
+              <span class="card-title">You Are Special.</span>
+              <span class="card-hint">tap to reveal</span>
+            </div>
+            <div class="flip-back">
+              <p class="card-content">Not because of one thing, but because of all the little things that make you... you.</p>
+            </div>
+          </div>
+        </div>
+        <div class="flip-card" data-card="2">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <span class="card-number">03</span>
+              <span class="card-title">You Are Appreciated.</span>
+              <span class="card-hint">tap to reveal</span>
+            </div>
+            <div class="flip-back">
+              <p class="card-content">For every smile, every conversation, every memory and every little moment.</p>
+            </div>
+          </div>
+        </div>
+        <div class="flip-card" data-card="3">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <span class="card-number">04</span>
+              <span class="card-title">You Are Loved.</span>
+              <span class="card-hint">tap to reveal</span>
+            </div>
+            <div class="flip-back">
+              <p class="card-content">And I hope you never forget that.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE 4 — LETTER -->
+    <section class="scene-4" id="scene4">
+      <div class="section-label" id="s4label">Just one little letter...</div>
+      <div class="letter-card" id="letterCard">
+        <div class="letter-line" id="ll1">Dear Nida,</div>
+        <div class="letter-line" id="ll2">It's September 14.</div>
+        <div class="letter-line" id="ll3">Which means tomorrow is finally here.</div>
+        <div class="letter-line" id="ll4">I've spent these last few days trying to make you smile in little ways, but tonight I just wanted to slow everything down for a moment.</div>
+        <div class="letter-line" id="ll5">Tomorrow is your birthday, but honestly, I don't think one day is enough to celebrate someone like you.</div>
+        <div class="letter-line" id="ll6">I'm grateful for the memories we've made, the silly moments, the conversations, the laughs, and all those little things that probably seem ordinary but mean a lot to me.</div>
+        <div class="letter-line" id="ll7">I hope tomorrow makes you feel as special as you actually are.</div>
+        <div class="letter-line" id="ll8">And I hope when you look back at this little journey, you smile knowing that I made it all for you.</div>
+        <div class="letter-line" id="ll9">Tomorrow is yours.</div>
+        <div class="letter-line" id="ll10">Tonight...</div>
+        <div class="letter-line" id="ll11">just know that someone is very excited to celebrate you.</div>
+        <div class="letter-line signature" id="ll12">Happy almost-birthday, Nida.</div>
+        <div class="letter-line signature" id="ll13">— Kabir ❤️</div>
+      </div>
+    </section>
+
+    <!-- SCENE 5 — COUNTDOWN -->
+    <section class="scene-5" id="scene5">
+      <div class="section-label" id="s5label">Tomorrow.</div>
+      <h2 class="section-title" id="s5title">Just a few hours left.</h2>
+
+      <div class="countdown-wrapper" id="countdownWrapper">
+        <div class="countdown-ring">
+          <svg viewBox="0 0 360 360">
+            <defs>
+              <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f0d8b0" />
+                <stop offset="50%" stop-color="#e8b88a" />
+                <stop offset="100%" stop-color="#d4a07a" />
+              </linearGradient>
+            </defs>
+            <circle class="track" cx="180" cy="180" r="160" />
+            <circle class="progress" id="ringProgress" cx="180" cy="180" r="160" />
+          </svg>
+        </div>
+        <div class="countdown-display">
+          <div class="countdown-numbers">
+            <span class="num" id="hours">00</span>
+            <span class="sep">:</span>
+            <span class="num" id="minutes">00</span>
+            <span class="sep">:</span>
+            <span class="num" id="seconds">00</span>
+          </div>
+          <div class="countdown-labels">
+            <span>Hours</span>
+            <span>Minutes</span>
+            <span>Seconds</span>
+          </div>
+        </div>
+      </div>
+      <p class="countdown-sub" id="s5sub">Until your birthday begins.</p>
+    </section>
+
+    <!-- SCENE 6 — LOCKED BOX -->
+    <section class="scene-6" id="scene6">
+      <div class="line" id="s6l1">Of course...</div>
+      <div class="line" id="s6l2">I can't tell you everything.</div>
+      <div class="line" id="s6l3">But I can tell you one thing.</div>
+      <div class="line gold" id="s6l4">Tomorrow is going to be different.</div>
+      <div class="line" id="s6l5">Because I've saved something special for September 15.</div>
+
+      <div class="locked-box" id="lockedBox">
+        <div class="box-body">
+          <div class="glow-ring"></div>
+          <span class="lock-icon">🔒</span>
+          <span class="lock-text">Open Tomorrow</span>
+        </div>
+      </div>
+      <p class="section-subtitle" id="s6sub" style="margin-top:1rem;">(no peeking)</p>
+    </section>
+
+    <!-- SCENE 7 — MEMORY SLIDESHOW -->
+    <section class="scene-7" id="scene7">
+      <div class="section-label" id="s7label">Some moments...</div>
+      <h2 class="section-title" id="s7title" style="margin-bottom:2rem;">Our story</h2>
+
+      <div class="slideshow-container" id="slideshow">
+        <div class="slide active" data-caption="Some moments...">
+          <img src="assets/images/nida-1.jpg" alt="Nida" onerror="this.style.display='none'; this.parentElement.querySelector('.placeholder').style.display='flex';">
+          <div class="placeholder" style="display:none;">
+            <span class="ph-icon">✦</span>
+            <span>a moment</span>
+          </div>
+          <div class="slide-caption">Some moments...</div>
+        </div>
+        <div class="slide" data-caption="Some smiles...">
+          <img src="assets/images/nida-2.jpg" alt="Nida" onerror="this.style.display='none'; this.parentElement.querySelector('.placeholder').style.display='flex';">
+          <div class="placeholder" style="display:none;">
+            <span class="ph-icon">✦</span>
+            <span>a smile</span>
+          </div>
+          <div class="slide-caption">Some smiles...</div>
+        </div>
+        <div class="slide" data-caption="Some memories...">
+          <img src="assets/images/couple-1.jpg" alt="Us" onerror="this.style.display='none'; this.parentElement.querySelector('.placeholder').style.display='flex';">
+          <div class="placeholder" style="display:none;">
+            <span class="ph-icon">✦</span>
+            <span>a memory</span>
+          </div>
+          <div class="slide-caption">Some memories...</div>
+        </div>
+        <div class="slide" data-caption="Somehow, they all became part of our story.">
+          <img src="assets/images/couple-2.jpg" alt="Us" onerror="this.style.display='none'; this.parentElement.querySelector('.placeholder').style.display='flex';">
+          <div class="placeholder" style="display:none;">
+            <span class="ph-icon">✦</span>
+            <span>our story</span>
+          </div>
+          <div class="slide-caption">Somehow, they all became part of our story.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE 8 — PROMISE -->
+    <section class="scene-8" id="scene8">
+      <div class="line" id="s8l1">Before you leave...</div>
+      <div class="line gold" id="s8l2">Make me one tiny promise.</div>
+
+      <div class="promise-btn" id="promiseBtn">I Promise ❤️</div>
+
+      <div class="promise-reveal" id="promiseReveal">
+        <div class="line" id="s8r1">Keep smiling tomorrow.</div>
+        <div class="line gold" id="s8r2">Because tomorrow is your day.</div>
+        <div class="line" id="s8r3">And you deserve to enjoy every second of it.</div>
+      </div>
+    </section>
+
+    <!-- SCENE 9 — FINAL -->
+    <section class="scene-9" id="scene9">
+      <div class="line" id="s9l1">September 14.</div>
+      <div class="line" id="s9l2">11:59 PM is getting closer.</div>
+      <div class="line" id="s9l3">Nida...</div>
+      <div class="line" id="s9l4">Close this page.</div>
+      <div class="line" id="s9l5">Get some sleep.</div>
+      <div class="line" id="s9l6">Because tomorrow...</div>
+      <div class="line gold" id="s9l7">YOU'RE THE BIRTHDAY GIRL. ❤️</div>
+      <div class="line" id="s9l8">Goodnight, Nida.</div>
+      <div class="line" id="s9l9">See you on September 15.</div>
+      <div class="line small" id="s9l10">— Kabir</div>
+    </section>
+
+    <!-- FINAL COUNTDOWN SCREEN -->
+    <section class="final-screen" id="finalScreen">
+      <div class="line" id="fs1">The Final Surprise</div>
+      <div class="line big" id="fs2">September 15</div>
+      <div class="line date" id="fs3">is waiting for you.</div>
+      <div class="final-countdown" id="finalCountdown">loading...</div>
+    </section>
+
+  </div>
+
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================ -->
+  <script>
+    (function() {
+      'use strict';
+
+      // ==========================================================
+      // 0. CONFIG
+      // ==========================================================
+      const BIRTHDAY = new Date("September 15, 2026 00:00:00").getTime();
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+      // ==========================================================
+      // 1. CUSTOM CURSOR
+      // ==========================================================
+      const cursor = document.getElementById('customCursor');
+      const cursorLabel = document.getElementById('cursorLabel');
+
+      if (!isTouch && cursor) {
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+          cursorX += (mouseX - cursorX) * 0.15;
+          cursorY += (mouseY - cursorY) * 0.15;
+          cursor.style.left = cursorX + 'px';
+          cursor.style.top = cursorY + 'px';
+          requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Hover effects
+        const interactiveEls = document.querySelectorAll('a, button, .promise-btn, .flip-card, .locked-box, .music-btn, .slide');
+        interactiveEls.forEach(el => {
+          el.addEventListener('mouseenter', () => {
+            cursor.classList.add('expand');
+            if (el.classList.contains('slide')) {
+              cursorLabel.textContent = 'View';
+            } else {
+              cursorLabel.textContent = '';
+            }
+          });
+          el.addEventListener('mouseleave', () => {
+            cursor.classList.remove('expand');
+            cursorLabel.textContent = '';
+          });
+        });
+      } else {
+        if (cursor) cursor.style.display = 'none';
+      }
+
+      // ==========================================================
+      // 2. PARTICLE CANVAS
+      // ==========================================================
+      const canvas = document.getElementById('particleCanvas');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      let animationId;
+      let canvasWidth, canvasHeight;
+
+      function resizeCanvas() {
+        canvasWidth = canvas.width = window.innerWidth;
+        canvasHeight = canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      class Particle {
+        constructor() {
+          this.reset();
+        }
+        reset() {
+          this.x = Math.random() * canvasWidth;
+          this.y = Math.random() * canvasHeight;
+          this.size = Math.random() * 1.8 + 0.3;
+          this.speedX = (Math.random() - 0.5) * 0.15;
+          this.speedY = (Math.random() - 0.5) * 0.15 - 0.08;
+          this.opacity = Math.random() * 0.4 + 0.1;
+          this.fadeSpeed = Math.random() * 0.003 + 0.001;
+          this.glow = Math.random() * 0.5 + 0.2;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if (this.y < -10) this.y = canvasHeight + 10;
+          if (this.y > canvasHeight + 10) this.y = -10;
+          if (this.x < -10) this.x = canvasWidth + 10;
+          if (this.x > canvasWidth + 10) this.x = -10;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 4);
+          gradient.addColorStop(0, `rgba(255, 220, 190, ${this.opacity})`);
+          gradient.addColorStop(0.5, `rgba(255, 200, 160, ${this.opacity * 0.4})`);
+          gradient.addColorStop(1, 'rgba(255, 180, 140, 0)');
+          ctx.fillStyle = gradient;
+          ctx.fill();
+        }
+      }
+
+      function initParticles() {
+        const count = Math.min(Math.floor(window.innerWidth * window.innerHeight / 18000), 120);
+        particles = [];
+        for (let i = 0; i < count; i++) {
+          particles.push(new Particle());
+        }
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        animationId = requestAnimationFrame(animateParticles);
+      }
+
+      if (!prefersReducedMotion) {
+        initParticles();
+        animateParticles();
+      }
+
+      // ==========================================================
+      // 3. GSAP REGISTRATION
+      // ==========================================================
+      gsap.registerPlugin(ScrollTrigger);
+
+      // ==========================================================
+      // 4. SCENE 1 — TONIGHT
+      // ==========================================================
+      const s1Elements = ['#s1l1', '#s1l2', '#s1l3', '#s1l4'];
+      if (!prefersReducedMotion) {
+        gsap.set(s1Elements, { opacity: 0, filter: 'blur(12px)', y: 20 });
+
+        const tl1 = gsap.timeline({ delay: 1.2 });
+
+        tl1.to('#s1l1', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.6, ease: 'power3.out' })
+           .to('#s1l2', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.6, ease: 'power3.out' }, '+=1.2')
+           .to('#s1l3', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.8, ease: 'power3.out' }, '+=1.4')
+           .to('#s1l4', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.6, ease: 'power3.out' }, '+=1.2');
+      } else {
+        gsap.set(s1Elements, { opacity: 1, filter: 'none', y: 0 });
+      }
+
+      // ==========================================================
+      // 5. SCENE 2 — FIVE SURPRISES
+      // ==========================================================
+      if (!prefersReducedMotion) {
+        gsap.set(['#s2label', '#s2title', '#s2sub'], { opacity: 0, y: 30 });
+        gsap.set('#dotsContainer .dot', { opacity: 0, y: 20, scale: 0.8 });
+        gsap.set(['#s2line1', '#s2line2', '#s2line3', '#s2line4'], { opacity: 0, filter: 'blur(8px)', y: 15 });
+
+        ScrollTrigger.create({
+          trigger: '#scene2',
+          start: 'top 70%',
+          once: true,
+          onEnter: () => {
+            const tl2 = gsap.timeline();
+
+            tl2.to('#s2label', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
+               .to('#s2title', { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.5')
+               .to('#s2sub', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.6')
+               .to('#dotsContainer .dot', {
+                 opacity: 1, y: 0, scale: 1, duration: 0.9,
+                 stagger: 0.15, ease: 'back.out(1.4)'
+               }, '-=0.4')
+               .to('#s2line1', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.2')
+               .to('#s2line2', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=0.6')
+               .to('#s2line3', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.4, ease: 'power3.out' }, '+=0.8')
+               .to('#s2line4', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=0.8');
+          }
+        });
+      } else {
+        gsap.set(['#s2label', '#s2title', '#s2sub', '#s2line1', '#s2line2', '#s2line3', '#s2line4'], { opacity: 1, y: 0, filter: 'none' });
+        gsap.set('#dotsContainer .dot', { opacity: 1, y: 0, scale: 1 });
+      }
+
+      // ==========================================================
+      // 6. SCENE 3 — CARDS
+      // ==========================================================
+      const flipCards = document.querySelectorAll('.flip-card');
+      flipCards.forEach((card) => {
+        card.addEventListener('click', () => {
+          card.classList.toggle('flipped');
+        });
+      });
+
+      if (!prefersReducedMotion) {
+        gsap.set(['#s3label', '#s3title', '#s3sub'], { opacity: 0, y: 30 });
+        gsap.set('.flip-card', { opacity: 0, y: 40 });
+
+        ScrollTrigger.create({
+          trigger: '#scene3',
+          start: 'top 70%',
+          once: true,
+          onEnter: () => {
+            const tl3 = gsap.timeline();
+            tl3.to('#s3label', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
+               .to('#s3title', { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.5')
+               .to('#s3sub', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.6')
+               .to('.flip-card', {
+                 opacity: 1, y: 0, duration: 1,
+                 stagger: 0.2, ease: 'power3.out'
+               }, '-=0.3');
+          }
+        });
+      } else {
+        gsap.set(['#s3label', '#s3title', '#s3sub'], { opacity: 1, y: 0 });
+        gsap.set('.flip-card', { opacity: 1, y: 0 });
+      }
+
+      // ==========================================================
+      // 7. SCENE 4 — LETTER TYPEWRITER
+      // ==========================================================
+      const letterLines = document.querySelectorAll('.letter-line');
+      if (!prefersReducedMotion) {
+        gsap.set(letterLines, { opacity: 0, y: 12 });
+
+        ScrollTrigger.create({
+          trigger: '#scene4',
+          start: 'top 60%',
+          once: true,
+          onEnter: () => {
+            const tl4 = gsap.timeline({ delay: 0.3 });
+            letterLines.forEach((line, i) => {
+              tl4.to(line, {
+                opacity: 1, y: 0, duration: 1.1, ease: 'power3.out'
+              }, i * 0.35);
+            });
+          }
+        });
+      } else {
+        gsap.set(letterLines, { opacity: 1, y: 0 });
+      }
+
+      // ==========================================================
+      // 8. SCENE 5 — COUNTDOWN
+      // ==========================================================
+      const hoursEl = document.getElementById('hours');
+      const minutesEl = document.getElementById('minutes');
+      const secondsEl = document.getElementById('seconds');
+      const ringProgress = document.getElementById('ringProgress');
+      const ringCircumference = 2 * Math.PI * 160; // r = 160
+
+      function updateCountdown() {
+        const now = Date.now();
+        const diff = BIRTHDAY - now;
+
+        if (diff <= 0) {
+          hoursEl.textContent = '00';
+          minutesEl.textContent = '00';
+          secondsEl.textContent = '00';
+          ringProgress.style.strokeDashoffset = 0;
+          document.getElementById('s5sub').textContent = 'Happy Birthday, Nida ❤️';
+          return;
+        }
+
+        const totalSeconds = Math.floor(diff / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        hoursEl.textContent = String(hours).padStart(2, '0');
+        minutesEl.textContent = String(minutes).padStart(2, '0');
+        secondsEl.textContent = String(seconds).padStart(2, '0');
+
+        // Progress ring: total seconds in a day (86400)
+        const totalDaySeconds = 86400;
+        const elapsed = totalDaySeconds - (totalSeconds % totalDaySeconds);
+        const progress = elapsed / totalDaySeconds;
+        const offset = ringCircumference * (1 - progress);
+        ringProgress.style.strokeDashoffset = offset;
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      // Scene 5 reveal
+      if (!prefersReducedMotion) {
+        gsap.set(['#s5label', '#s5title', '#countdownWrapper', '#s5sub'], { opacity: 0, y: 30 });
+        ScrollTrigger.create({
+          trigger: '#scene5',
+          start: 'top 70%',
+          once: true,
+          onEnter: () => {
+            const tl5 = gsap.timeline();
+            tl5.to('#s5label', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
+               .to('#s5title', { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.5')
+               .to('#countdownWrapper', { opacity: 1, y: 0, duration: 1.4, ease: 'power3.out' }, '-=0.6')
+               .to('#s5sub', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.4');
+          }
+        });
+      } else {
+        gsap.set(['#s5label', '#s5title', '#countdownWrapper', '#s5sub'], { opacity: 1, y: 0 });
+      }
+
+      // ==========================================================
+      // 9. SCENE 6 — LOCKED BOX
+      // ==========================================================
+      const lockedBox = document.getElementById('lockedBox');
+      let boxClicked = false;
+
+      lockedBox.addEventListener('click', () => {
+        if (boxClicked) return;
+        boxClicked = true;
+
+        const boxBody = lockedBox.querySelector('.box-body');
+        const lockText = lockedBox.querySelector('.lock-text');
+
+        // Shake animation
+        gsap.to(lockedBox, {
+          x: -8, duration: 0.08, repeat: 5, yoyo: true,
+          onComplete: () => {
+            gsap.to(lockedBox, { x: 0, duration: 0.08 });
+            lockText.textContent = 'Nice try, Nida 😂';
+            setTimeout(() => {
+              lockText.textContent = 'Tomorrow.';
+            }, 2000);
+          }
+        });
+      });
+
+      if (!prefersReducedMotion) {
+        gsap.set(['#s6l1', '#s6l2', '#s6l3', '#s6l4', '#s6l5', '#s6sub'], { opacity: 0, filter: 'blur(8px)', y: 15 });
+        gsap.set('#lockedBox', { opacity: 0, scale: 0.85 });
+
+        ScrollTrigger.create({
+          trigger: '#scene6',
+          start: 'top 60%',
+          once: true,
+          onEnter: () => {
+            const tl6 = gsap.timeline();
+            tl6.to('#s6l1', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' })
+               .to('#s6l2', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=0.8')
+               .to('#s6l3', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=0.8')
+               .to('#s6l4', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.4, ease: 'power3.out' }, '+=1')
+               .to('#s6l5', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=0.8')
+               .to('#lockedBox', { opacity: 1, scale: 1, duration: 1.4, ease: 'elastic.out(1, 0.6)' }, '-=0.2')
+               .to('#s6sub', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1, ease: 'power3.out' }, '-=0.4');
+          }
+        });
+      } else {
+        gsap.set(['#s6l1', '#s6l2', '#s6l3', '#s6l4', '#s6l5', '#s6sub'], { opacity: 1, filter: 'none', y: 0 });
+        gsap.set('#lockedBox', { opacity: 1, scale: 1 });
+      }
+
+      // ==========================================================
+      // 10. SCENE 7 — SLIDESHOW
+      // ==========================================================
+      const slides = document.querySelectorAll('.slide');
+      let currentSlide = 0;
+      let slideInterval;
+
+      function nextSlide() {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+      }
+
+      function startSlideshow() {
+        if (prefersReducedMotion) {
+          slides[0].classList.add('active');
+          return;
+        }
+        slideInterval = setInterval(nextSlide, 4500);
+      }
+
+      ScrollTrigger.create({
+        trigger: '#scene7',
+        start: 'top 60%',
+        once: true,
+        onEnter: () => {
+          startSlideshow();
+        }
+      });
+
+      if (!prefersReducedMotion) {
+        gsap.set(['#s7label', '#s7title'], { opacity: 0, y: 30 });
+        gsap.set('#slideshow', { opacity: 0, scale: 0.95 });
+
+        ScrollTrigger.create({
+          trigger: '#scene7',
+          start: 'top 70%',
+          once: true,
+          onEnter: () => {
+            const tl7 = gsap.timeline();
+            tl7.to('#s7label', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
+               .to('#s7title', { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.5')
+               .to('#slideshow', { opacity: 1, scale: 1, duration: 1.4, ease: 'power3.out' }, '-=0.6');
+          }
+        });
+      } else {
+        gsap.set(['#s7label', '#s7title'], { opacity: 1, y: 0 });
+        gsap.set('#slideshow', { opacity: 1, scale: 1 });
+      }
+
+      // ==========================================================
+      // 11. SCENE 8 — PROMISE
+      // ==========================================================
+      const promiseBtn = document.getElementById('promiseBtn');
+      const promiseReveal = document.getElementById('promiseReveal');
+      let promiseClicked = false;
+
+      promiseBtn.addEventListener('click', () => {
+        if (promiseClicked) return;
+        promiseClicked = true;
+        promiseBtn.classList.add('promised');
+        promiseBtn.textContent = 'Promise made ❤️';
+
+        // Particle burst
+        if (!prefersReducedMotion) {
+          const rect = promiseBtn.getBoundingClientRect();
+          const burstX = rect.left + rect.width / 2;
+          const burstY = rect.top + rect.height / 2;
+
+          for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.left = burstX + 'px';
+            particle.style.top = burstY + 'px';
+            particle.style.width = '4px';
+            particle.style.height = '4px';
+            particle.style.borderRadius = '50%';
+            particle.style.background = `rgba(255, ${180 + Math.random() * 60}, ${140 + Math.random() * 60}, ${0.6 + Math.random() * 0.4})`;
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '99999';
+            particle.style.boxShadow = '0 0 12px rgba(255, 200, 160, 0.6)';
+            document.body.appendChild(particle);
+
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 80 + Math.random() * 160;
+            const dx = Math.cos(angle) * distance;
+            const dy = Math.sin(angle) * distance;
+
+            gsap.to(particle, {
+              x: dx, y: dy, opacity: 0, scale: 0,
+              duration: 1.2 + Math.random() * 0.8,
+              ease: 'power2.out',
+              onComplete: () => particle.remove()
+            });
+          }
+        }
+
+        // Reveal text
+        const revealLines = ['#s8r1', '#s8r2', '#s8r3'];
+        if (!prefersReducedMotion) {
+          gsap.set(revealLines, { opacity: 0, filter: 'blur(8px)', y: 15 });
+          const tl8 = gsap.timeline({ delay: 0.3 });
+          tl8.to('#s8r1', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' })
+             .to('#s8r2', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=0.8')
+             .to('#s8r3', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=0.8');
+        } else {
+          gsap.set(revealLines, { opacity: 1, filter: 'none', y: 0 });
+        }
+      });
+
+      // Scene 8 entrance
+      if (!prefersReducedMotion) {
+        gsap.set(['#s8l1', '#s8l2', '#promiseBtn'], { opacity: 0, y: 30 });
+        ScrollTrigger.create({
+          trigger: '#scene8',
+          start: 'top 70%',
+          once: true,
+          onEnter: () => {
+            const tl8b = gsap.timeline();
+            tl8b.to('#s8l1', { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' })
+                .to('#s8l2', { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.5')
+                .to('#promiseBtn', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.4');
+          }
+        });
+      } else {
+        gsap.set(['#s8l1', '#s8l2', '#promiseBtn'], { opacity: 1, y: 0 });
+      }
+
+      // ==========================================================
+      // 12. SCENE 9 — FINAL
+      // ==========================================================
+      if (!prefersReducedMotion) {
+        const s9Lines = ['#s9l1', '#s9l2', '#s9l3', '#s9l4', '#s9l5', '#s9l6', '#s9l7', '#s9l8', '#s9l9', '#s9l10'];
+        gsap.set(s9Lines, { opacity: 0, filter: 'blur(8px)', y: 15 });
+
+        ScrollTrigger.create({
+          trigger: '#scene9',
+          start: 'top 60%',
+          once: true,
+          onEnter: () => {
+            const tl9 = gsap.timeline();
+            tl9.to('#s9l1', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' })
+               .to('#s9l2', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=0.8')
+               .to('#s9l3', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=1')
+               .to('#s9l4', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=0.8')
+               .to('#s9l5', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=0.8')
+               .to('#s9l6', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=0.8')
+               .to('#s9l7', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.6, ease: 'power3.out' }, '+=1.2')
+               .to('#s9l8', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=1')
+               .to('#s9l9', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=0.8')
+               .to('#s9l10', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '+=0.8');
+          }
+        });
+      } else {
+        gsap.set(['#s9l1', '#s9l2', '#s9l3', '#s9l4', '#s9l5', '#s9l6', '#s9l7', '#s9l8', '#s9l9', '#s9l10'], { opacity: 1, filter: 'none', y: 0 });
+      }
+
+      // ==========================================================
+      // 13. FINAL COUNTDOWN SCREEN
+      // ==========================================================
+      const finalCountdownEl = document.getElementById('finalCountdown');
+
+      function updateFinalCountdown() {
+        const now = Date.now();
+        const diff = BIRTHDAY - now;
+
+        if (diff <= 0) {
+          finalCountdownEl.textContent = 'Happy Birthday, Nida ❤️';
+          return;
+        }
+
+        const totalSeconds = Math.floor(diff / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        finalCountdownEl.textContent = `${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
+      }
+
+      updateFinalCountdown();
+      setInterval(updateFinalCountdown, 1000);
+
+      if (!prefersReducedMotion) {
+        gsap.set(['#fs1', '#fs2', '#fs3', '#finalCountdown'], { opacity: 0, filter: 'blur(8px)', y: 15 });
+        ScrollTrigger.create({
+          trigger: '#finalScreen',
+          start: 'top 70%',
+          once: true,
+          onEnter: () => {
+            const tlf = gsap.timeline();
+            tlf.to('#fs1', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.4, ease: 'power3.out' })
+               .to('#fs2', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.4, ease: 'power3.out' }, '-=0.5')
+               .to('#fs3', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.6')
+               .to('#finalCountdown', { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.4');
+          }
+        });
+      } else {
+        gsap.set(['#fs1', '#fs2', '#fs3', '#finalCountdown'], { opacity: 1, filter: 'none', y: 0 });
+      }
+
+      // ==========================================================
+      // 14. MUSIC
+      // ==========================================================
+      const musicBtn = document.getElementById('musicBtn');
+      const musicIcon = document.getElementById('musicIcon');
+      let audio = null;
+      let isPlaying = false;
+      let audioAvailable = true;
+
+      // Try to load audio
+      try {
+        audio = new Audio('assets/audio/romantic.mp3');
+        audio.loop = true;
+        audio.volume = 0.4;
+        audio.addEventListener('error', () => {
+          audioAvailable = false;
+          musicBtn.style.opacity = '0.3';
+          musicBtn.style.pointerEvents = 'none';
+        });
+      } catch (e) {
+        audioAvailable = false;
+        musicBtn.style.opacity = '0.3';
+        musicBtn.style.pointerEvents = 'none';
+      }
+
+      musicBtn.addEventListener('click', () => {
+        if (!audioAvailable || !audio) return;
+
+        if (isPlaying) {
+          audio.pause();
+          isPlaying = false;
+          musicIcon.textContent = '♪';
+          musicBtn.classList.remove('playing');
+        } else {
+          audio.play().then(() => {
+            isPlaying = true;
+            musicIcon.textContent = '⏸';
+            musicBtn.classList.add('playing');
+          }).catch(() => {
+            // Autoplay blocked or file not found
+            audioAvailable = false;
+            musicBtn.style.opacity = '0.3';
+            musicBtn.style.pointerEvents = 'none';
+          });
+        }
+      });
+
+      // ==========================================================
+      // 15. SMOOTH SCROLL FOR ANCHORS (none, but just in case)
+      // ==========================================================
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+
+      // ==========================================================
+      // 16. REFRESH SCROLLTRIGGER
+      // ==========================================================
+      window.addEventListener('load', () => {
+        ScrollTrigger.refresh();
+      });
+
+    })();
+  </script>
+</body>
+</html>

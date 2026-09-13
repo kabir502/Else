@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050508" />
+  <meta name="description" content="A little birthday surprise, made with love by Kabir." />
+  <meta property="og:title" content="Nida ❤️ — Happy Birthday" />
+  <meta property="og:description" content="A little birthday surprise, made with love by Kabir." />
+  <meta property="og:type" content="website" />
+  <title>Nida ❤️ — Happy Birthday</title>
+
+  <!-- Google Fonts: Luxury Editorial Serif & Modern Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="css/birthday-final.css" />
+</head>
+<body>
+
+  <!-- Ambient Backdrop Layers -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+  <div class="ambient-gradient-mesh" aria-hidden="true"></div>
+  <div class="ambient-vignette" aria-hidden="true"></div>
+  <div class="film-grain" aria-hidden="true"></div>
+
+  <!-- SVG Gradients Definition -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ff708f" />
+        <stop offset="50%" stop-color="#ff4d6d" />
+        <stop offset="100%" stop-color="#c9184a" />
+      </linearGradient>
+      <linearGradient id="flameGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#ffffff" />
+        <stop offset="25%" stop-color="#ffea79" />
+        <stop offset="70%" stop-color="#ff708f" />
+        <stop offset="100%" stop-color="#c9184a" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- ========================================================================
+       1. INITIAL LOCK SCREEN
+       ======================================================================== -->
+  <section class="lock-screen-wrapper" id="lock-screen" aria-label="Surprise Lock Screen">
+    <div class="lock-bg-stars" aria-hidden="true"></div>
+    <div class="lock-glow-center" aria-hidden="true"></div>
+
+    <div class="lock-container">
+      <p class="lock-eyebrow">There's one last surprise waiting for you...</p>
+      <h1 class="lock-title">For Nida <span class="heart-beat" aria-hidden="true">❤️</span></h1>
+
+      <div class="lock-card">
+        <label for="lock-password-input" class="lock-label">Only you can unlock this.</label>
+
+        <form id="lock-form" autocomplete="off">
+          <div class="lock-input-group">
+            <input
+              type="password"
+              id="lock-password-input"
+              class="lock-input"
+              placeholder="Enter the secret..."
+              inputmode="numeric"
+              required
+              autofocus
+            />
+          </div>
+
+          <button type="submit" id="btn-lock-submit" class="btn-lock-submit">
+            <span>Unlock My Surprise ❤️</span>
+          </button>
+
+          <p class="lock-error-msg" id="lock-error-msg" role="alert" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       2. CINEMATIC UNLOCK STAGE & SEQUENCER
+       ======================================================================== -->
+  <div class="unlock-cinematic-stage" id="unlock-stage" aria-hidden="true">
+    <div class="unlock-heart-container" id="unlock-heart">
+      <svg class="unlock-svg-heart" viewBox="0 0 100 100">
+        <!-- Left Half of Heart -->
+        <path class="heart-half-left" d="M 50 25 C 40 10 15 15 15 35 C 15 55 35 70 50 85 Z" />
+        <!-- Right Half of Heart -->
+        <path class="heart-half-right" d="M 50 25 C 60 10 85 15 85 35 C 85 55 65 70 50 85 Z" />
+        <!-- Glowing central crack line -->
+        <path id="heart-crack-line" d="M 50 22 L 48 35 L 52 48 L 47 62 L 50 85" fill="none" stroke="#ffea79" stroke-width="2.5" stroke-linecap="round" opacity="0" stroke-dasharray="100" stroke-dashoffset="100" />
+      </svg>
+    </div>
+
+    <!-- Expanding Radial Light Burst -->
+    <div class="unlock-warm-light-burst" id="unlock-burst"></div>
+
+    <!-- SplitText Reveal Lines -->
+    <div class="unlock-text-sequence" id="unlock-sequence">
+      <h2 class="unlock-seq-line" id="unlock-line-1">Happy Birthday</h2>
+      <h2 class="unlock-seq-line" id="unlock-line-2">Nida ❤️</h2>
+      <p class="unlock-seq-line sub-line" id="unlock-line-3">September 15, 2026</p>
+      <p class="unlock-seq-line from-line" id="unlock-line-4">From Kabir</p>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MAIN BIRTHDAY SURPRISE CONTENT
+       ======================================================================== -->
+  <main id="surprise-content">
+
+    <!-- ======================================================================
+         3. HERO SECTION
+         ====================================================================== -->
+    <section class="section hero-section" id="section-hero" aria-label="Birthday Hero">
+      <!-- Ambient Backlights & Large Breathing Heart -->
+      <div class="hero-light-ray" aria-hidden="true"></div>
+      <div class="hero-giant-heart-bg" aria-hidden="true">
+        <svg viewBox="0 0 100 100" fill="url(#heartGradient)">
+          <path d="M 50 25 C 38 8 10 16 10 40 C 10 65 35 78 50 92 C 65 78 90 65 90 40 C 90 16 62 8 50 25 Z" />
+        </svg>
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-date-badge">
+          <span>✦ September 15, 2026 ✦</span>
+        </div>
+
+        <h1 class="hero-title">
+          <span class="gradient-text">Happy Birthday, Nida</span>
+        </h1>
+
+        <p class="hero-subtitle">Today isn't just your birthday...</p>
+
+        <p class="hero-reveal-quote">
+          It's a celebration of the person who makes my world a little more beautiful.
+        </p>
+
+        <div class="hero-scroll-indicator" aria-hidden="true">
+          <span>Scroll to explore</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="7 10 12 15 17 10"></polyline>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. "THIS DAY IS YOURS" (3 Glass Cards)
+         ====================================================================== -->
+    <section class="section" id="section-cards" aria-labelledby="cards-title">
+      <div class="container">
+        <span class="section-tag">Celebration</span>
+        <h2 class="section-title" id="cards-title">Today is all about you.</h2>
+        <p class="section-subtitle">
+          Three of the endless things that make you so unforgettable and special to me.
+        </p>
+
+        <div class="cards-grid">
+          <!-- Card 1: Smile -->
+          <article class="cinematic-card" tabindex="0">
+            <div class="card-specular-glow" aria-hidden="true"></div>
+            <div class="card-icon-wrap" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                <line x1="15" y1="9" x2="15.01" y2="9"></line>
+              </svg>
+            </div>
+            <span class="card-num">01 / RADIANCE</span>
+            <h3 class="card-heading">Your Smile</h3>
+            <p class="card-subtext">One of my favorite things in this world.</p>
+            <p class="card-poetic-desc">
+              The effortless way it lights up an entire room and instantly makes whatever day I'm having a hundred times better.
+            </p>
+          </article>
+
+          <!-- Card 2: Heart -->
+          <article class="cinematic-card" tabindex="0">
+            <div class="card-specular-glow" aria-hidden="true"></div>
+            <div class="card-icon-wrap" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </div>
+            <span class="card-num">02 / GENTLENESS</span>
+            <h3 class="card-heading">Your Heart</h3>
+            <p class="card-subtext">The kindness and warmth you carry.</p>
+            <p class="card-poetic-desc">
+              The gentle care you give to everyone around you, and the boundless purity and affection you hold inside your soul.
+            </p>
+          </article>
+
+          <!-- Card 3: Presence -->
+          <article class="cinematic-card" tabindex="0">
+            <div class="card-specular-glow" aria-hidden="true"></div>
+            <div class="card-icon-wrap" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </div>
+            <span class="card-num">03 / COMFORT</span>
+            <h3 class="card-heading">Your Presence</h3>
+            <p class="card-subtext">Somehow, everything feels better when you're around.</p>
+            <p class="card-poetic-desc">
+              In quiet conversations or laughter that carries into the night, just being near you feels like coming home.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         5. A LETTER FROM KABIR
+         ====================================================================== -->
+    <section class="section" id="section-letter" aria-labelledby="letter-title">
+      <div class="container-narrow">
+        <span class="section-tag">Personal Note</span>
+        <h2 class="section-title" id="letter-title">A little letter for you...</h2>
+        <p class="section-subtitle">Straight from the heart, written only for your eyes.</p>
+
+        <article class="letter-parchment-wrapper">
+          <div class="letter-wax-seal" aria-hidden="true">K&amp;N</div>
+
+          <h3 class="letter-salutation">Dear Nida,</h3>
+
+          <div class="letter-body">
+            <p class="letter-paragraph">
+              Happy Birthday, my favorite person. Today marks another year that the world has been blessed with your light, but more than that, it’s a day I get to reflect on just how much you mean to me.
+            </p>
+
+            <p class="letter-paragraph">
+              You have this rare, effortless gift—your smile alone has turned some of my hardest days into pure comfort. The kindness you show, the warmth in your voice, and the genuine way you care about the people you love make you one of the most truly special souls I have ever known.
+            </p>
+
+            <p class="letter-paragraph">
+              Looking back at all the memories we’ve created together—the little laughs, the quiet moments where nothing needed to be said, and every shared adventure—I find myself smiling without even realizing it. Every moment with you becomes my favorite memory.
+            </p>
+
+            <p class="letter-paragraph">
+              I am so endlessly grateful to have you in my life. As you step into this new year, I hope life gives you back all the joy and happiness you bring to everyone else, multiplied a hundred times over. I hope your dreams come alive, your days are filled with peace, and you always remember how deeply cherished you are.
+            </p>
+
+            <p class="letter-paragraph">
+              No matter where life takes us, I want to keep making memories with you, celebrating every milestone, and reminding you every single day of how extraordinary you are.
+            </p>
+          </div>
+
+          <div class="letter-signoff">
+            <p class="letter-signoff-line">Happy Birthday, Nida.</p>
+            <p class="letter-signoff-wish">Always keep smiling.</p>
+
+            <div class="letter-signature-container">
+              <span style="font-family:var(--font-serif); font-size:1.2rem; color:var(--text-muted)">With all my love,</span>
+              <svg class="signature-svg" viewBox="0 0 200 60" aria-label="Signature Kabir">
+                <!-- Cursive Kabir handwriting path -->
+                <path class="signature-path" d="M 15 45 C 10 30 18 15 25 15 C 32 15 25 45 28 45 C 32 45 42 22 45 35 C 48 42 55 45 62 38 C 68 32 72 38 76 45 C 80 45 88 28 92 38 C 96 45 105 45 110 38 C 115 32 120 40 128 42 C 140 45 155 35 170 38" />
+              </svg>
+              <span class="signature-heart" aria-hidden="true">❤️</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         6. OUR FOUR MEMORIES
+         ====================================================================== -->
+    <section class="section" id="section-gallery" aria-labelledby="gallery-title">
+      <div class="container">
+        <span class="section-tag">Cherished Moments</span>
+        <h2 class="section-title" id="gallery-title">Our Four Memories</h2>
+        <p class="section-subtitle">Moments captured in time, forever held in my heart.</p>
+
+        <div class="gallery-grid">
+          <!-- Memory 1: nida-1.jpg -->
+          <div class="memory-card" data-index="0" role="button" tabindex="0" aria-label="View photo: That smile ❤️">
+            <div class="memory-img-wrapper">
+              <img src="assets/images/nida-1.jpg" alt="Photo of Nida" class="memory-img" loading="lazy" />
+              <div class="memory-light-sweep" aria-hidden="true"></div>
+            </div>
+            <div class="memory-overlay">
+              <span class="memory-tag">Memory 01 • Nida</span>
+              <h3 class="memory-caption">That smile ❤️</h3>
+            </div>
+          </div>
+
+          <!-- Memory 2: nida-2.jpg -->
+          <div class="memory-card" data-index="1" role="button" tabindex="0" aria-label="View photo: Beautiful, as always.">
+            <div class="memory-img-wrapper">
+              <img src="assets/images/nida-2.jpg" alt="Another photo of Nida" class="memory-img" loading="lazy" />
+              <div class="memory-light-sweep" aria-hidden="true"></div>
+            </div>
+            <div class="memory-overlay">
+              <span class="memory-tag">Memory 02 • Nida</span>
+              <h3 class="memory-caption">Beautiful, as always.</h3>
+            </div>
+          </div>
+
+          <!-- Memory 3: couple-1.jpg -->
+          <div class="memory-card" data-index="2" role="button" tabindex="0" aria-label="View photo: Us.">
+            <div class="memory-img-wrapper">
+              <img src="assets/images/couple-1.jpg" alt="Kabir and Nida together" class="memory-img" loading="lazy" />
+              <div class="memory-light-sweep" aria-hidden="true"></div>
+            </div>
+            <div class="memory-overlay">
+              <span class="memory-tag">Memory 03 • Together</span>
+              <h3 class="memory-caption">Us.</h3>
+            </div>
+          </div>
+
+          <!-- Memory 4: couple-2.jpg -->
+          <div class="memory-card" data-index="3" role="button" tabindex="0" aria-label="View photo: My favorite kind of memory.">
+            <div class="memory-img-wrapper">
+              <img src="assets/images/couple-2.jpg" alt="Kabir and Nida sharing a memory" class="memory-img" loading="lazy" />
+              <div class="memory-light-sweep" aria-hidden="true"></div>
+            </div>
+            <div class="memory-overlay">
+              <span class="memory-tag">Memory 04 • Together</span>
+              <h3 class="memory-caption">My favorite kind of memory.</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fullscreen Lightbox Modal -->
+    <div class="lightbox-modal" id="lightbox-modal" role="dialog" aria-modal="true" aria-label="Photo Lightbox">
+      <button class="lightbox-close-btn" id="lightbox-close-btn" aria-label="Close Lightbox">✕</button>
+      <button class="lightbox-nav-btn prev" id="lightbox-prev-btn" aria-label="Previous Photo">❮</button>
+      <button class="lightbox-nav-btn next" id="lightbox-next-btn" aria-label="Next Photo">❯</button>
+
+      <div class="lightbox-content-wrap">
+        <img id="lightbox-image" class="lightbox-image" src="" alt="" />
+        <p id="lightbox-caption" class="lightbox-caption"></p>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         7. INTERACTIVE "TAP FOR LOVE"
+         ====================================================================== -->
+    <section class="section tap-love-section" id="section-tap" aria-labelledby="tap-title">
+      <div class="container-narrow">
+        <span class="section-tag">Interactive</span>
+        <h2 class="section-title" id="tap-title">A Little Love For You</h2>
+        <p class="section-subtitle">Whenever you need a reminder of how much you are loved, tap right here.</p>
+
+        <div class="heart-stage-wrap">
+          <div class="tap-rings-pulse" aria-hidden="true"></div>
+          <button class="interactive-tap-heart" id="interactive-heart" aria-label="Tap for love">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </button>
+        </div>
+
+        <p class="tap-prompt-text">Tap the heart ❤️</p>
+        <span class="tap-counter-badge" id="tap-count-badge">Love sparks sent: 0</span>
+
+        <div class="tap-overflow-banner" id="tap-milestone-banner" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         8. LOVE METER
+         ====================================================================== -->
+    <section class="section" id="section-love-meter" aria-labelledby="meter-title">
+      <div class="container-narrow">
+        <span class="section-tag">Measure The Unmeasurable</span>
+        <h2 class="section-title" id="meter-title">How much does Kabir love Nida?</h2>
+        <p class="section-subtitle">Slide across to find out the calculated percentage.</p>
+
+        <div class="love-meter-card">
+          <div class="meter-value-display">
+            <span id="meter-val-text">0%</span>
+          </div>
+
+          <p class="meter-status-text" id="meter-status-text">Drag the slider to begin...</p>
+
+          <div class="meter-slider-container">
+            <input
+              type="range"
+              id="love-meter-slider"
+              class="custom-range-slider"
+              min="0"
+              max="100"
+              value="0"
+              aria-label="Love Meter Slider"
+            />
+          </div>
+
+          <p class="meter-final-statement" id="meter-statement">
+            Math simply wasn't designed to calculate something this boundless. ❤️
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         9. "MAKE A WISH"
+         ====================================================================== -->
+    <section class="section wish-section" id="section-wish" aria-labelledby="wish-title">
+      <div class="container-narrow">
+        <span class="section-tag">Birthday Magic</span>
+        <h2 class="section-title" id="wish-title">Close your eyes...</h2>
+        <p class="section-subtitle">Make a wish. Think of whatever your heart desires most.</p>
+
+        <div class="candle-interactive-wrapper">
+          <div class="candle-aura" aria-hidden="true"></div>
+
+          <svg class="candle-body-svg" viewBox="0 0 140 220" aria-label="Birthday Candle">
+            <!-- Flame -->
+            <path id="candle-flame-elem" class="candle-flame-path" d="M 70 30 C 58 55 60 75 70 85 C 80 75 82 55 70 30 Z" />
+            <!-- Wick -->
+            <line x1="70" y1="85" x2="70" y2="105" stroke="#333" stroke-width="3" stroke-linecap="round" />
+            <!-- Wax Candle Body -->
+            <rect x="52" y="105" width="36" height="85" rx="6" fill="#fcf6f3" />
+            <path d="M 52 115 Q 60 125 65 115 Q 75 130 88 112" fill="none" stroke="#f0e2d8" stroke-width="2" />
+            <!-- Candlestick Base -->
+            <ellipse cx="70" cy="195" rx="42" ry="12" fill="url(#heartGradient)" opacity="0.85" />
+          </svg>
+
+          <button type="button" id="btn-make-wish" class="btn-wish">
+            <span>I Made My Wish ✨</span>
+          </button>
+        </div>
+
+        <div class="wish-revealed-message" id="wish-revealed-msg">
+          <p class="wish-line">Whatever your wish is...</p>
+          <p class="wish-line highlight">I hope life gives you a hundred reasons to smile.</p>
+          <p class="wish-line">And maybe...</p>
+          <p class="wish-line romantic-punchline">...a few of those reasons can be me. ❤️</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         10. FINAL SURPRISE (EMOTIONAL CLIMAX)
+         ====================================================================== -->
+    <section class="section final-surprise-section" id="section-climax" aria-label="Final Surprise">
+      <div class="final-climax-sequence">
+        <p class="climax-line">Wait...</p>
+        <p class="climax-line">There's one more thing.</p>
+        <p class="climax-line heroic">Nida...</p>
+        <p class="climax-line">Thank you for being you.</p>
+        <p class="climax-line">Thank you for every smile.</p>
+        <p class="climax-line">Every memory.</p>
+        <p class="climax-line">Every little moment.</p>
+        <p class="climax-line heroic">Happy Birthday to the person who means so much to me.</p>
+        <h2 class="climax-line huge-name">NIDA ❤️</h2>
+        <p class="climax-line duo-names">Kabir × Nida</p>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         11. FINAL PHOTO (COUPLE CINEMA)
+         ====================================================================== -->
+    <section class="final-photo-section" id="section-final-photo" aria-label="Final Photo">
+      <img src="assets/images/couple-1.jpg" alt="Kabir and Nida together forever" class="final-photo-bg" />
+      <div class="final-photo-overlay" aria-hidden="true"></div>
+
+      <div class="final-photo-content">
+        <p class="photo-overlay-line">If I could keep one thing forever...</p>
+        <p class="photo-overlay-highlight">It would be moments like this.</p>
+        <p class="photo-overlay-tagline">Happy Birthday, Nida ❤️</p>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         12. FINAL BUTTON & CREDITS
+         ====================================================================== -->
+    <footer class="footer-finale-section" id="section-footer">
+      <button type="button" id="btn-replay" class="btn-replay-experience">
+        <span>Replay Our Surprise ↻</span>
+      </button>
+
+      <p class="footer-credits">Made with love by Kabir ❤️</p>
+      <p class="footer-date-stamp">September 15, 2026 • Forever &amp; Always</p>
+    </footer>
+
+  </main>
+
+  <!-- ========================================================================
+       13. FLOATING MUSIC CONTROL (♫)
+       ======================================================================== -->
+  <button
+    type="button"
+    class="floating-music-btn"
+    id="floating-music-btn"
+    aria-label="Toggle Romantic Music"
+    title="Play romantic music ♫"
+  >
+    <span class="music-icon-note">♫</span>
+    <span class="music-soundwaves" aria-hidden="true"></span>
+  </button>
+
+  <!-- GSAP 3 & ScrollTrigger CDN with robust Fallback -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Master Interactive Script -->
+  <script src="js/birthday-final.js"></script>
+</body>
+</html>
